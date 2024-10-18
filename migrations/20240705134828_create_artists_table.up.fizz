@@ -1,0 +1,15 @@
+create_table("artists") {
+  t.Column("id", "integer", {primary: true})
+  t.Column("name", "string", {"default": ""})
+  t.Column("genres", "string", {"default": ""})
+  t.Column("description", "varchar", {"default": ""})
+  t.Column("phone", "string", {"default": ""})
+  t.Column("email", "string", {"default": ""})
+  t.Column("city", "string", {"default": ""})
+  t.Column("facebook", "string", {"default": ""})
+  t.Column("twitter", "string", {"default": ""})
+  t.Column("youtube", "string", {"default": ""})
+  t.Column("banner", "string", {"default": ""})
+  t.Column("logo", "string", {"default": ""})
+  t.Column("featured_image", "string", {"default": ""})
+}

@@ -1,0 +1,595 @@
+{{ define "base" }}
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>MusiqCity - Music Bands and Musicians</title>
+    <meta name="description" content="Find your entertainer here" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Place favicon.svg in the root directory -->
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="/static/images/favicon.png"
+    />
+    <!-- CSS here -->
+    <link rel="stylesheet" href="/static/client/app/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/static/client/app/css/meanmenu.min.css" />
+    <link rel="stylesheet" href="/static/client/app/css/nice-select.css" />
+    <link
+      rel="stylesheet"
+      href="/static/client/app/css/swiper-bundle.min.css"
+    />
+    <link rel="stylesheet" href="/static/client/app/css/slick.css" />
+    <link rel="stylesheet" href="/static/client/app/css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="/static/client/app/css/backtotop.css" />
+    <link rel="stylesheet" href="/static/client/app/css/magnific-popup.css" />
+    <link rel="stylesheet" href="/static/client/app/css/flaticon_musicly.css" />
+    <link rel="stylesheet" href="/static/client/app/css/fontawesome-pro.css" />
+    <link rel="stylesheet" href="/static/client/app/css/spacing.css" />
+    <link rel="stylesheet" href="/static/client/app/css/main.css" />
+
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" /> -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker.min.css"
+    />
+    <title>{{ template "title" . }}</title>
+    {{block "css" .}} {{end}}
+
+    <style>
+      /* scrollbar */
+      ::-webkit-scrollbar {
+        width: 7px;
+      }
+
+      ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px grey;
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #dd3938;
+        border-radius: 10px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #dd3938;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!--[if lte IE 9]>
+      <p class="browserupgrade">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="https://browsehappy.com/">upgrade your browser</a> to improve
+        your experience and security.
+      </p>
+    <![endif]-->
+
+    <div class="mouseCursor cursor-outer"></div>
+    <div class="mouseCursor cursor-inner"><span>Drag</span></div>
+
+    <!-- Preloader start -->
+    <div id="preloader">
+      <div class="line-loader">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+      </div>
+    </div>
+    <!-- preloader end -->
+
+    <!-- Offcanvas area start -->
+    <div class="fix">
+      <div class="offcanvas__info">
+        <div class="offcanvas__wrapper">
+          <div class="offcanvas__content">
+            <div
+              class="offcanvas__top mb-40 d-flex justify-content-between align-items-center"
+            >
+              <div class="offcanvas__logo">
+                <a href="/">
+                  <img src="/static/images/logo_white.svg" alt="logo" />
+                </a>
+              </div>
+              <div class="offcanvas__close">
+                <button>
+                  <i class="fal fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="offcanvas__user mb-30 d-xxl-none">
+              <div class="user__acount">
+                <span>
+                  <a href="javascript:void(0)"><i class="flaticon-user"></i></a>
+                </span>
+                <!-- <div class="user__name-mail">
+                  <h4 class="user__name">
+                    <a href="javascript:void(0)">Johnson</a>
+                  </h4>
+                  <p class="user__mail">johnson@webmail.com</p>
+                </div> -->
+              </div>
+            </div>
+            <div class="offcanvas__search mb-30">
+              <form action="#">
+                <input type="text" placeholder="Search Here" />
+                <button type="submit"><i class="far fa-search"></i></button>
+              </form>
+            </div>
+            <div class="hr-1 mt-30 mb-30 d-xl-none"></div>
+            <div class="mobile-menu fix mb-30 d-xl-none"></div>
+            <div class="hr-1 mt-30 mb-30 d-xl-none"></div>
+            <div class="offcanvas__btn mb-30">
+              <a class="ms-border-btn" href="/"
+                ><i class="fa-solid fa-plus"></i> List Your Service</a
+              >
+            </div>
+            <div class="offcanvas__social">
+              <div class="ms-footer-social mb-0">
+                <a
+                  href="https://www.linkedin.com/"
+                  title="Instagram"
+                  target="_blank"
+                  >IN</a
+                >
+                <a href="https://twitter.com/" title="Twitter" target="_blank"
+                  >TW</a
+                >
+                <a
+                  href="https://www.facebook.com/"
+                  title="Facebook"
+                  target="_blank"
+                  >FB</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="offcanvas__overlay"></div>
+    <div class="offcanvas__overlay-white"></div>
+    <!-- Offcanvas area start -->
+
+    <!-- Header area start -->
+    <header>
+      <div
+        id="header-sticky"
+        class="header__area header-1 ms-header-fixed ms-bg-body"
+      >
+        <div class="container-fluid ms-maw-1710">
+          <div class="row align-items-center">
+            <div class="col-12">
+              <div class="mega__menu-wrapper p-relative">
+                <div
+                  class="header__main ms-border2 d-flex align-items-center justify-content-between"
+                >
+                  <div class="header__logo pt-25 pb-25">
+                    <a href="/">
+                      <img src="/static/images/logo_white.svg" alt="logo" />
+                    </a>
+                  </div>
+
+                  <!-- <div class="d-none d-xxl-block">
+                    <div class="browse-filter p-relative ms-browse-act-wrap">
+                      <div class="ms-browse-icon ms-cp">
+                        <a class="browse-filter__text" href="javascript:void(0)"
+                          ><i class="flaticon-options-lines"></i> Browse Acts</a
+                        >
+                      </div>
+                      <div class="ms-browse-act-item-wrap p-absolute">
+                        <div class="ms-song-item">
+                          <div class="ms-song-img p-relative">
+                            <a href="genres.html"
+                              ><img
+                                src="assets/img/genres/genres-01.jpg"
+                                alt="brand-song"
+                            /></a>
+                          </div>
+                          <div class="ms-song-content">
+                            <h3 class="ms-song-title">
+                              <a href="genres.html">The Different Lights</a>
+                            </h3>
+                          </div>
+                        </div>
+                        <div class="ms-song-item">
+                          <div class="ms-song-img p-relative">
+                            <a href="genres.html"
+                              ><img
+                                src="assets/img/genres/genres-02.jpg"
+                                alt="brand-song"
+                            /></a>
+                          </div>
+                          <div class="ms-song-content">
+                            <h3 class="ms-song-title">
+                              <a href="genres.html">The Sweet lockdown</a>
+                            </h3>
+                          </div>
+                        </div>
+                        <div class="ms-song-item">
+                          <div class="ms-song-img p-relative">
+                            <a href="genres.html"
+                              ><img
+                                src="assets/img/genres/genres-03.jpg"
+                                alt="brand-song"
+                            /></a>
+                          </div>
+                          <div class="ms-song-content">
+                            <h3 class="ms-song-title">
+                              <a href="genres.html"
+                                >The Sonics Corporate Band</a
+                              >
+                            </h3>
+                          </div>
+                        </div>
+                        <div class="ms-song-item">
+                          <div class="ms-song-img p-relative">
+                            <a href="genres.html"
+                              ><img
+                                src="assets/img/genres/genres-04.jpg"
+                                alt="brand-song"
+                            /></a>
+                          </div>
+                          <div class="ms-song-content">
+                            <h3 class="ms-song-title">
+                              <a href="genres.html">The Northern Lights</a>
+                            </h3>
+                          </div>
+                        </div>
+                        <div class="ms-song-item">
+                          <div class="ms-song-img p-relative">
+                            <a href="genres.html"
+                              ><img
+                                src="assets/img/genres/genres-05.jpg"
+                                alt="brand-song"
+                            /></a>
+                          </div>
+                          <div class="ms-song-content">
+                            <h3 class="ms-song-title">
+                              <a href="genres.html">The Sweet The Jets</a>
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+
+                  <div class="header__right">
+                    <div class="mean__menu-wrapper">
+                      <div class="main-menu main-menu-ff-space">
+                        <nav id="mobile-menu">
+                          <ul>
+                            <li>
+                              <a href="/">Home</a>
+                            </li>
+
+                            <li>
+                              <a href="/artists">Artists</a>
+                            </li>
+
+                            <li class="has-dropdown">
+                              <a href="javascript:void(0)">Others</a>
+                              <ul class="submenu">
+                                <li><a href="/about">About Us</a></li>
+                                <li>
+                                  <a href="/about">How It Works</a>
+                                </li>
+                                <li>
+                                  <a href="/contact"> Help Center</a>
+                                </li>
+                              </ul>
+                            </li>
+
+                            <li><a href="/user/login">Login</a></li> 
+                          </ul>
+                        </nav>
+                        <!-- for wp -->
+                        <div class="header__hamburger ml-50 d-none">
+                          <button
+                            type="button"
+                            class="hamburger-btn offcanvas-open-btn"
+                          >
+                            <span>01</span>
+                            <span>01</span>
+                            <span>01</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="header__action-inner d-flex align-items-center">
+                      <div
+                        class="enquiry__list ml-10 mr-10 ms-browse-act-wrap p-relative"
+                      >
+                        <div
+                          class="ms-enquiry-box p-relative d-none d-xl-inline-flex"
+                        >
+                          <a href="#"
+                            ><i class="flaticon-star icon"></i>
+                            <span class="text">My enquiry list</span>
+                            <span class="number">03</span></a
+                          >
+                        </div>
+                        <div class="ms-browse-act-item-wrap p-absolute">
+                          <div class="ms-song-item">
+                            <div class="ms-song-img p-relative">
+                              <a href="genres.html"
+                                ><img
+                                  src="assets/img/genres/genres-03.jpg"
+                                  alt="brand-song"
+                              /></a>
+                            </div>
+                            <div class="ms-song-content">
+                              <h3 class="ms-song-title">
+                                <a href="genres.html"
+                                  >The Sonics Corporate Band</a
+                                >
+                              </h3>
+                            </div>
+                          </div>
+                          <div class="ms-song-item">
+                            <div class="ms-song-img p-relative">
+                              <a href="genres.html"
+                                ><img
+                                  src="assets/img/genres/genres-04.jpg"
+                                  alt="brand-song"
+                              /></a>
+                            </div>
+                            <div class="ms-song-content">
+                              <h3 class="ms-song-title">
+                                <a href="genres.html">The Northern Lights</a>
+                              </h3>
+                            </div>
+                          </div>
+                          <div class="ms-song-item">
+                            <div class="ms-song-img p-relative">
+                              <a href="genres.html"
+                                ><img
+                                  src="assets/img/genres/genres-05.jpg"
+                                  alt="brand-song"
+                              /></a>
+                            </div>
+                            <div class="ms-song-content">
+                              <h3 class="ms-song-title">
+                                <a href="genres.html">The Sweet The Jets</a>
+                              </h3>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="header__btn">
+                        <a href="join.html" class="ms-border-btn"
+                          ><i class="fa-regular fa-plus"></i>List Your
+                          Service</a
+                        >
+                      </div>
+                      <div class="user__acount d-none d-xxl-inline-flex">
+                        <span>
+                          <a href="login.html"><i class="flaticon-user"></i></a>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="header__hamburger">
+                      <div class="sidebar__toggle">
+                        <a class="bar-icon" href="javascript:void(0)">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Header area end -->
+
+    <div class="ms-all-content ms-content-mobile-space pt-130">
+      {{ template "content" . }}
+
+      <!-- Footer Area Start Here  -->
+      <footer>
+        <div
+          class="ms-footer-bg ms-footer-overlay zindex-1 include__bg pt-120"
+          data-background="/static/client/img/bg/sound-bg.png"
+        >
+          <div class="ms-footer-top pt-130">
+            <div class="container">
+              <div class="ms-footer-border pb-10">
+                <div class="row">
+                  <div class="col-xxl-2 col-lg-3 col-md-6">
+                    <div class="ms-footer-widget mb-50">
+                      <h3 class="ms-footer-title">Local Band Group</h3>
+                      <ul>
+                        <li><a href="/artists">The Tricks</a></li>
+                        <li><a href="/artists">Sound City</a></li>
+                        <li><a href="/artists">Big Teaser</a></li>
+                        <li><a href="/artists">The New Tones</a></li>
+                        <li><a href="/artists">Halos Music</a></li>
+                        <li><a href="/artists">Soho Soul</a></li>
+                        <li><a href="/artists">Atlantic</a></li>
+                        <li><a href="/artists">The Fiction</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-xxl-2 col-lg-3 col-md-6">
+                    <div class="ms-footer-widget mb-50">
+                      <h3 class="ms-footer-title">Trending Genres</h3>
+                      <ul>
+                        <li><a href="/artists">Wedding Bands</a></li>
+                        <li><a href="/artists">Jazz & Swing</a></li>
+                        <li><a href="/artists">Musician</a></li>
+                        <li><a href="/artists">Classical Musician</a></li>
+                        <li><a href="/artists">Corporate Party</a></li>
+                        <li><a href="/artists">Premiere Party Band</a></li>
+                        <li><a href="/artists">DJ Songs</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-xxl-2 col-lg-3 col-md-6">
+                    <div class="ms-footer-widget mb-50">
+                      <h3 class="ms-footer-title">Country We Serve</h3>
+                      <ul>
+                        <li><a href="/artists">Nigeria</a></li>
+                        <li><a href="/artists">United State</a></li>
+                        <li><a href="/artists">Canada</a></li>
+                        <li><a href="/artists">Australia</a></li>
+                        <li><a href="/artists">China</a></li>
+                        <li><a href="/artists">South Africa</a></li>
+                        <li><a href="/artists">Japan</a></li>
+                        <li><a href="/artists">Singapore</a></li>                        
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-xxl-2 col-lg-3 col-md-6">
+                    <div class="ms-footer-widget mb-50">
+                      <h3 class="ms-footer-title">Company</h3>
+                      <ul>
+                        <li><a href="/about">About us</a></li>
+                        <li><a href="/contact">Contact us</a></li>
+                        <li><a href="/faq">Terms & Policy</a></li>
+                        <li><a href="/faq">Help & Support</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-xxl-4 col-lg-5 col-md-6">
+                    <div class="ms-footer-widget mb-50">
+                      <h3 class="ms-footer-title">Subscribe Now</h3>
+                      <div class="ms-subscribe-form mb-20 pt-5">
+                        <i class="flaticon-mail"></i>
+                        <input type="text" placeholder="Enter your mail" />
+                        <button type="submit" class="ms-subscribe-btn">
+                          <i class="fa-sharp fa-solid fa-paper-plane"></i>
+                        </button>
+                      </div>
+                      <div class="ms-footer-warning mb-25">
+                        <p>You Don’t Get Any Spam Message!</p>
+                      </div>
+                      <div class="ms-footer-social">
+                        <a
+                          href="https://www.linkedin.com/"
+                          title="Instagram"
+                          target="_blank"
+                          >IN</a
+                        >
+                        <a
+                          href="https://twitter.com/"
+                          title="Twitter"
+                          target="_blank"
+                          >TW</a
+                        >
+                        <a
+                          href="https://www.facebook.com/"
+                          title="Facebook"
+                          target="_blank"
+                          >FB</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ms-footer-bottom">
+            <div class="container">
+              <div
+                class="ms-footer-bottom-wrap align-items-center d-flex flex-wrap justify-content-between pt-35 pb-20"
+              >
+                <div class="ms-footer-logo mb-15">
+                  <a href="/"
+                    ><img src="/static/images/logo_white.svg" alt="logo"
+                  /></a>
+                </div>
+                <div class="ms-footer-copy">
+                  <p>© MusiqCity 2023, All Rights Reserved</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+      <!-- Footer Area End Here  -->
+    </div>
+
+    <!-- Back to top start -->
+    <div class="progress-wrap">
+      <svg
+        class="progress-circle svg-content"
+        width="100%"
+        height="100%"
+        viewBox="-1 -1 102 102"
+      >
+        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+      </svg>
+    </div>
+    <!-- Back to top end -->
+
+    <!-- JS here -->
+    <script src="/static/client/app/js/jquery-3.6.0.min.js"></script>
+    <script src="/static/client/app/js/waypoints.min.js"></script>
+    <script src="/static/client/app/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/client/app/js/nice-select.min.js"></script>
+    <script src="/static/client/app/js/meanmenu.min.js"></script>
+    <script src="/static/client/app/js/swiper-bundle.min.js"></script>
+    <script src="/static/client/app/js/slick.min.js"></script>
+    <script src="/static/client/app/js/magnific-popup.min.js"></script>
+    <script src="/static/client/app/js/backtotop.js"></script>
+    <script src="/static/client/app/js/ajax-form.js"></script>
+    <script src="/static/client/app/js/jquery-ui.min.js"></script>
+    <script src="/static/client/app/js/gsap.min.js"></script>
+    <script src="/static/client/app/js/ScrollToPlugin.min.js"></script>
+    <script src="/static/client/app/js/SplitText.min.js"></script>
+    <script src="/static/client/app/js/ScrollTrigger.min.js"></script>
+    <script src="/static/client/app/js/jquery.jplayer.min.js"></script>
+    <script src="/static/client/app/js/jplayer.playlist.js"></script>
+    <script src="/static/client/app/js/settings.js"></script>
+    <script src="/static/client/app/js/main.js"></script>
+
+    <!-- date picker script  -->
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker-full.min.js"></script>
+
+    <!-- Sweet Alert script -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- internal script -->
+    <script src="/static/js/app.js"></script>
+
+    <script>
+      {{with .Error}}
+      Prompt().toast({ title: "{{.}}", icon: "error", timer: 6000, showConfirmButton: true, confirmButtonText: "Close" })
+      {{end}}
+
+      {{with .Flash}}
+      Prompt().toast({ title: "{{.}}", icon: "success", timer: 6000, showConfirmButton: true, confirmButtonText: "Close" })
+      {{end}}
+
+      {{with .Warning}}
+      Prompt().toast({ title: "{{.}}", icon: "warning", timer: 6000, showConfirmButton: true, confirmButtonText: "Close" })
+      {{end}}
+    </script>
+
+    {{block "js" .}} {{end}}
+  </body>
+</html>
+
+{{ end }}

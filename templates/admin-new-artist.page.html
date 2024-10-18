@@ -1,0 +1,184 @@
+{{template "admin" .}}
+{{define "css"}}
+<style>
+  .main-form {
+    margin-top: 1rem;
+  }
+
+  .main-form label {
+    font-weight: bold;
+  }
+
+  .main-form .form-control {
+    border-radius: 5px;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+</style>
+{{end}} {{define "admin_content"}}
+
+<!-- partial -->
+<div class="main-panel">
+  {{$artist := index .Data "artist"}}
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-md-12 grid-margin">
+        <h3 class="font-weight-bold mb-0">Create Artist</h3>        
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="grid-margin">
+        <form action="/admin/artists/new-artist" method="post" class="row g-3 main-form" novalidate>
+          <!-- needs-validation -->
+          <div class="col-md-6">
+            <label for="artist-name" class="form-label">Name</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+                  "artist_name"}} is-invalid {{end}}' id="artist-name" name="artist_name" value="{{$artist.Name}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "artist_name"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="genres" class="form-label">Genres</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+              "genres"}} is-invalid {{end}}' id="genres" name="genres" value="{{$artist.Genres}}" required />
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "genres"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="phone" class="form-label">Phone</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+              "phone"}} is-invalid {{end}}' id="phone" name="phone" value="{{$artist.Phone}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "phone"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+              "email"}} is-invalid {{end}}' id="email" name="email" value="{{$artist.Email}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "email"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="city" class="form-label">City</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+              "city"}} is-invalid {{end}}' id="city" name="city" value="{{$artist.City}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "city"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="facebook" class="form-label">Facebook</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+              "facebook"}} is-invalid {{end}}' id="facebook" name="facebook" value="{{$artist.Facebook}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "facebook"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="twitter" class="form-label">Twitter</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+              "twitter"}} is-invalid {{end}}' id="twitter" name="twitter" value="{{$artist.Twitter}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "twitter"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="youtube" class="form-label">Youtube</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+              "youtube"}} is-invalid {{end}}' id="youtube" name="youtube" value="{{$artist.Youtube}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "youtube"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="logo" class="form-label">Logo (306px x 306px)</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+              "logo"}} is-invalid {{end}}' id="logo" name="logo" value="{{$artist.Logo}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "logo"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="banner" class="form-label">Banner (1297px x 532px)</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+              "banner"}} is-invalid {{end}}' id="banner" name="banner" value="{{$artist.Banner}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "banner"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="featured_image" class="form-label">Featured Image (418px x 496px)</label>
+            <input type="text" class='form-control {{with .Form.Errors.Get
+              "featured_image"}} is-invalid {{end}}' id="featured_image" name="featured_image" value="{{$artist.FeaturedImage}}"
+              required />
+            <div class="valid-feedback">Looks good!</div>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "featured_image"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" id="description" cols="30" rows="10" class='form-control {{with .Form.Errors.Get
+              "description"}} is-invalid {{end}}'>{{$artist.Description}}</textarea>
+            <div class="invalid-feedback">
+              {{with .Form.Errors.Get "description"}} {{.}} {{end}}
+            </div>
+          </div>
+
+          <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+
+          <div class="button-container mt-3">
+            <button class="btn btn-primary call-to-action-button" type="submit">
+              Save
+            </button>
+            <a href="/admin/artists" class="btn btn-warning call-to-action-button">
+              Back
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- main-panel ends -->
+{{end}}
+{{define "js"}}
+{{end}}

@@ -1,0 +1,22 @@
+add_foreign_key("bookings", "artist_id", {"artists": ["id"]}, {
+    "on_delete": "cascade",
+    "on_update": "cascade",
+})
+
+add_foreign_key("artist_restrictions", "artist_id", {"artists": ["id"]}, {
+    "on_delete": "cascade",
+    "on_update": "cascade",
+})
+
+add_foreign_key("artist_restrictions", "restriction_id", {"restrictions": ["id"]}, {
+    "on_delete": "cascade",
+    "on_update": "cascade",
+})
+
+add_foreign_key("artist_restrictions", "booking_id", {"bookings": ["id"]}, {
+    "on_delete": "cascade",
+    "on_update": "cascade",
+})
+
+add_index("bookings", "email", {})
+add_index("bookings", "last_name", {})

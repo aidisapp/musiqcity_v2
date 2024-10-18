@@ -1,0 +1,6 @@
+.idea
+run.bat
+run.sh
+database.yml
+coverage.out
+.env

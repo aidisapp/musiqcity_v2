@@ -1,0 +1,8 @@
+create_table("artist_restrictions") {
+  t.Column("id", "integer", {primary: true})
+  t.Column("start_date", "date", {})
+  t.Column("end_date", "date", {})
+  t.Column("artist_id", "integer", {})
+  t.Column("booking_id", "integer", {"null": true})
+  t.Column("restriction_id", "integer", {})
+}

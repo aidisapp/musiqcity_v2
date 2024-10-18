@@ -1,0 +1,107 @@
+{{template "admin" .}}
+{{define "css"}}
+<style>
+  .calendar-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .hr-top {
+    border: 1px solid rgb(170, 170, 170);
+    border-radius: 10px;
+  }
+</style>
+{{end}} {{define "admin_content"}}
+
+<!-- partial -->
+<div class="main-panel">
+  {{$now := index .Data "now"}}
+  {{$rooms := index .Data "rooms"}}
+  {{$daysInMonth := index .IntMap "days_in_month"}}
+  {{$currentMonth:= index .StringMap "this_month"}}
+  {{$currentYear:= index .StringMap "this_year"}}
+
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-md-12 grid-margin">
+        <div>
+          <h4 class="font-weight-bold mb-0">Reservations Calendar</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="grid-margin">
+        <div class="calendar-buttons mb-4">
+          <a class="btn btn-sm btn-outline-secondary"
+            href='/admin/reservations-calendar?y={{index .StringMap "previous_year"}}&m={{index .StringMap "previous_month"}}'>
+            <i class="ti-angle-double-left"></i>
+          </a>
+
+          <h3>{{formatDate $now "January"}}, {{formatDate $now "2006"}}</h3>
+
+          <a class="btn btn-sm btn-outline-secondary"
+            href='/admin/reservations-calendar?y={{index .StringMap "next_year"}}&m={{index .StringMap "next_month"}}'>
+            <i class="ti-angle-double-right"></i>
+          </a>
+        </div>
+
+        <form action="/admin/reservations-calendar" method="post">
+          <div class="table-responsive">
+            {{range $rooms}}
+            {{$roomID := .ID}}
+            {{$blocks := index $.Data (printf "block_map_%d" .ID)}}
+            {{$reservations := index $.Data (printf "reservation_map_%d" .ID)}}
+
+            <h4 class="mb-2">{{.RoomName}}</h4>
+            <table class="table table-bordered table-sm mb-4">
+              <tr class="table-dark">
+                {{range $index := iterate $daysInMonth}}
+                <td class="text-center">
+                  {{add $index 1}}
+                </td>
+
+                {{end}}
+              </tr>
+
+              <tr>
+                {{range $index := iterate $daysInMonth}}
+                <td class="text-center">
+                  {{if gt (index $reservations (printf "%s-%s-%d" $currentYear $currentMonth (add $index 1))) 0}}
+                  <a href="/admin/reservations/cal/{{index $reservations (printf "%s-%s-%d" $currentYear $currentMonth
+                    (add $index 1))}}/show?y={{$currentYear}}&m={{$currentMonth}}" class="text-decoration-none">
+                    <span class="text-danger">R</span>
+                  </a>
+                  {{else}}
+                  <input {{if gt (index $blocks (printf "%s-%s-%d" $currentYear $currentMonth (add $index 1))) 0}}
+                    checked name="remove_block_{{$roomID}}_{{printf "%s-%s-%d" $currentYear $currentMonth (add $index
+                    1)}}" value="{{index $blocks (printf "%s-%s-%d" $currentYear $currentMonth (add $index 1))}}"
+                    {{else}} name="add_block_{{$roomID}}_{{printf "%s-%s-%d" $currentYear $currentMonth (add $index
+                    1)}}" value="1" {{end}} type="checkbox">
+                  {{end}}
+                </td>
+                {{end}}
+              </tr>
+            </table>
+            {{end}}
+
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+            <input type="hidden" name="month" value="{{$currentMonth}}" />
+            <input type="hidden" name="year" value="{{$currentYear}}" />
+          </div>
+
+          <hr class="hr-top">
+
+          <button class="btn btn-primary call-to-action-button mt-4" type="submit">
+            Save
+          </button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- main-panel ends -->
+
+{{end}} {{define "js"}} {{end}}
