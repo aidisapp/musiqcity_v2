@@ -1,6 +1,6 @@
 package models
 
-import "github.com/aidisapp/MusiqCity/internal/forms"
+import "github.com/aidisapp/musiqcity_v2/internal/forms"
 
 type TemplateData struct {
 	StringMap       map[string]string

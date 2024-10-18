@@ -11,9 +11,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aidisapp/MusiqCity/internal/config"
-	"github.com/aidisapp/MusiqCity/internal/models"
-	"github.com/aidisapp/MusiqCity/internal/render"
+	"github.com/aidisapp/musiqcity_v2/internal/config"
+	"github.com/aidisapp/musiqcity_v2/internal/models"
+	"github.com/aidisapp/musiqcity_v2/internal/render"
 	"github.com/alexedwards/scs/v2"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"

@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/aidisapp/MusiqCity/internal/helpers"
+	"github.com/aidisapp/musiqcity_v2/internal/helpers"
 	"github.com/justinas/nosurf"
 )
 

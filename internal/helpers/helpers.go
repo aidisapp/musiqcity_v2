@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/aidisapp/MusiqCity/internal/config"
+	"github.com/aidisapp/musiqcity_v2/internal/config"
 )
 
 var app *config.AppConfig

@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aidisapp/MusiqCity/internal/config"
-	"github.com/aidisapp/MusiqCity/internal/models"
+	"github.com/aidisapp/musiqcity_v2/internal/config"
+	"github.com/aidisapp/musiqcity_v2/internal/models"
 	"github.com/alexedwards/scs/v2"
 )
 

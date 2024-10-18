@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/aidisapp/MusiqCity/internal/models"
+	"github.com/aidisapp/musiqcity_v2/internal/models"
 	"golang.org/x/crypto/bcrypt"
 )
 

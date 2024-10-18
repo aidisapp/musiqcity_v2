@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"log"
 
-	"github.com/aidisapp/MusiqCity/internal/models"
+	"github.com/aidisapp/musiqcity_v2/internal/models"
 	"github.com/alexedwards/scs/v2"
 )
 

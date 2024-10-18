@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/aidisapp/MusiqCity/internal/config"
+	"github.com/aidisapp/musiqcity_v2/internal/config"
 	"github.com/go-chi/chi/v5"
 )
 

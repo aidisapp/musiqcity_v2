@@ -3,7 +3,7 @@ package repository
 import (
 	"time"
 
-	"github.com/aidisapp/MusiqCity/internal/models"
+	"github.com/aidisapp/musiqcity_v2/internal/models"
 )
 
 type DatabaseRepo interface {

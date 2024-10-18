@@ -9,12 +9,12 @@ import (
 	"os"
 	"time"
 
-	"github.com/aidisapp/MusiqCity/internal/config"
-	"github.com/aidisapp/MusiqCity/internal/driver"
-	"github.com/aidisapp/MusiqCity/internal/handlers"
-	"github.com/aidisapp/MusiqCity/internal/helpers"
-	"github.com/aidisapp/MusiqCity/internal/models"
-	"github.com/aidisapp/MusiqCity/internal/render"
+	"github.com/aidisapp/musiqcity_v2/internal/config"
+	"github.com/aidisapp/musiqcity_v2/internal/driver"
+	"github.com/aidisapp/musiqcity_v2/internal/handlers"
+	"github.com/aidisapp/musiqcity_v2/internal/helpers"
+	"github.com/aidisapp/musiqcity_v2/internal/models"
+	"github.com/aidisapp/musiqcity_v2/internal/render"
 	"github.com/alexedwards/scs/v2"
 	"github.com/joho/godotenv"
 )

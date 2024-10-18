@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/aidisapp/MusiqCity/internal/models"
+	"github.com/aidisapp/musiqcity_v2/internal/models"
 )
 
 func TestAddDefaultData(test *testing.T) {

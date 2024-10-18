@@ -3,8 +3,8 @@ package dbrepo
 import (
 	"database/sql"
 
-	"github.com/aidisapp/MusiqCity/internal/config"
-	"github.com/aidisapp/MusiqCity/internal/repository"
+	"github.com/aidisapp/musiqcity_v2/internal/config"
+	"github.com/aidisapp/musiqcity_v2/internal/repository"
 )
 
 type postgresDBRepo struct {

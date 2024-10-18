@@ -1,6 +1,6 @@
-module github.com/aidisapp/MusiqCity
+module github.com/aidisapp/musiqcity_v2
 
-go 1.19
+go 1.22.4
 
 require (
 	github.com/alexedwards/scs/v2 v2.8.0
@@ -11,7 +11,7 @@ require (
 	github.com/justinas/nosurf v1.1.1
 	github.com/lib/pq v1.10.9
 	github.com/sendinblue/APIv3-go-library/v2 v2.1.2
-	golang.org/x/crypto v0.25.0
+	golang.org/x/crypto v0.28.0
 )
 
 require (

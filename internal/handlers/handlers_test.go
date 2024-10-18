@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aidisapp/MusiqCity/internal/driver"
-	"github.com/aidisapp/MusiqCity/internal/models"
+	"github.com/aidisapp/musiqcity_v2/internal/driver"
+	"github.com/aidisapp/musiqcity_v2/internal/models"
 )
 
 type postData struct {

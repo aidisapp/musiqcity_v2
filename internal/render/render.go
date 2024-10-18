@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/aidisapp/MusiqCity/internal/config"
-	"github.com/aidisapp/MusiqCity/internal/models"
+	"github.com/aidisapp/musiqcity_v2/internal/config"
+	"github.com/aidisapp/musiqcity_v2/internal/models"
 	"github.com/justinas/nosurf"
 )
 
@@ -19,7 +19,7 @@ var functions = template.FuncMap{
 	"formatDate": FormatDate,
 	"iterate":    Iterate,
 	"add":        Add,
-	"truncate":  Truncate,
+	"truncate":   Truncate,
 }
 
 var app *config.AppConfig
@@ -52,7 +52,7 @@ func HumanDate(t time.Time) string {
 
 func Truncate(s string, length int) string {
 	if len(s) > length {
-			return s[:length] + "..."
+		return s[:length] + "..."
 	}
 	return s
 }

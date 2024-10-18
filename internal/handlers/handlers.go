@@ -9,14 +9,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/aidisapp/MusiqCity/internal/config"
-	"github.com/aidisapp/MusiqCity/internal/driver"
-	"github.com/aidisapp/MusiqCity/internal/forms"
-	"github.com/aidisapp/MusiqCity/internal/helpers"
-	"github.com/aidisapp/MusiqCity/internal/models"
-	"github.com/aidisapp/MusiqCity/internal/render"
-	"github.com/aidisapp/MusiqCity/internal/repository"
-	"github.com/aidisapp/MusiqCity/internal/repository/dbrepo"
+	"github.com/aidisapp/musiqcity_v2/internal/config"
+	"github.com/aidisapp/musiqcity_v2/internal/driver"
+	"github.com/aidisapp/musiqcity_v2/internal/forms"
+	"github.com/aidisapp/musiqcity_v2/internal/helpers"
+	"github.com/aidisapp/musiqcity_v2/internal/models"
+	"github.com/aidisapp/musiqcity_v2/internal/render"
+	"github.com/aidisapp/musiqcity_v2/internal/repository"
+	"github.com/aidisapp/musiqcity_v2/internal/repository/dbrepo"
 	"github.com/go-chi/chi/v5"
 )
 

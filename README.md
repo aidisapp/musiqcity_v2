@@ -77,6 +77,6 @@ MusiqCity has been a rewarding project that strengthened our bond as a team. We 
 
 ## Connect
 
-- **GitHub:** [MusiqCity GitHub Repository](https://github.com/aidisapp/musiqcity_v2)
+- **GitHub:** [MusiqCity GitHub Repository](https://github.com/aidisapp/musiqcity_v2_v2)
 - **Live Project:** [MusiqCity Live Version](https://musiqcity-live-url.com)
 ```
