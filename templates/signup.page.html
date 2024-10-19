@@ -14,7 +14,7 @@
         <div class="col-xl-12">
           <div class="ms-join-wrap ms-join-space mb-70 ms-bg-2">
             <h3 class="white-text ms-title3 mb-30">Add Your Information</h3>
-            <form action="/user/signup" method="post" novalidate>
+            <form action="/user/signup" method="post">
               <div class="row">
                 <div class="col-lg-6">
                   <div class="ms-input-box style-2">
@@ -76,24 +76,29 @@
                 </div>
 
                 <div class="col-lg-6">
-                  <div class="ms-input-box style-2">
+                  <div class="ms-input-box style-2 position-relative">
                     <label>Password</label>
-                    <input
-                      type="password"
-                      placeholder="Doe"
-                      class='form-control {{with .Form.Errors.Get
-                      "password"}} is-invalid {{end}}'
-                      id="password"
-                      name="password"
-                      required
-                    />
-
+                    <div class="position-relative">
+                      <input
+                        type="password"
+                        placeholder="Scopatumana@#223"
+                        class='form-control {{with .Form.Errors.Get "password"}} is-invalid {{end}}'
+                        id="password"
+                        name="password"
+                        required
+                      />
+                      <i
+                        class="fas fa-eye-slash position-absolute top-50 end-0 translate-middle-y me-3"
+                        id="togglePassword"
+                        style="cursor: pointer"
+                      ></i>
+                    </div>
                     <div class="invalid-feedback">
                       {{with .Form.Errors.Get "password"}} {{.}} {{end}}
                     </div>
                   </div>
                 </div>
-
+                
                 <div class="col-lg-12">
                   <div class="ms-submit-btn mt-20">
                     <button class="unfill__btn" type="submit">
@@ -111,4 +116,20 @@
   <!-- Join Area End Here  -->
 </div>
 
-{{ end }}
+{{ end }} {{define "js"}}
+<script>
+  const togglePassword = document.querySelector("#togglePassword");
+  const password = document.querySelector("#password");
+
+  togglePassword.addEventListener("click", function () {
+    // Toggle the type attribute
+    const type =
+      password.getAttribute("type") === "password" ? "text" : "password";
+    password.setAttribute("type", type);
+
+    // Toggle the icon
+    this.classList.toggle("fa-eye");
+    this.classList.toggle("fa-eye-slash");
+  });
+</script>
+{{end}}
