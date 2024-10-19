@@ -327,10 +327,11 @@
                       </div>
                     </div>
 
-                    <!-- <div class="header__action-inner d-flex align-items-center">
+                    <div class="header__action-inner d-flex align-items-center">
                       <div
                         class="enquiry__list ml-10 mr-10 ms-browse-act-wrap p-relative"
                       >
+                      {{if eq .IsAuthenticated 1}}
                         <div
                           class="ms-enquiry-box p-relative d-none d-xl-inline-flex"
                         >
@@ -340,12 +341,13 @@
                             <span class="number">03</span></a
                           >
                         </div>
+                        
                         <div class="ms-browse-act-item-wrap p-absolute">
                           <div class="ms-song-item">
                             <div class="ms-song-img p-relative">
                               <a href="genres.html"
                                 ><img
-                                  src="assets/img/genres/genres-03.jpg"
+                                  src="/static/client/img/genres/genres-03.png"
                                   alt="brand-song"
                               /></a>
                             </div>
@@ -361,7 +363,7 @@
                             <div class="ms-song-img p-relative">
                               <a href="genres.html"
                                 ><img
-                                  src="assets/img/genres/genres-04.jpg"
+                                  src="/static/client/img/genres/genres-02.jpg"
                                   alt="brand-song"
                               /></a>
                             </div>
@@ -375,7 +377,7 @@
                             <div class="ms-song-img p-relative">
                               <a href="genres.html"
                                 ><img
-                                  src="assets/img/genres/genres-05.jpg"
+                                  src="/static/client/img/genres/genres-03.png"
                                   alt="brand-song"
                               /></a>
                             </div>
@@ -386,6 +388,7 @@
                             </div>
                           </div>
                         </div>
+                      {{end}}
                       </div>
                       <div class="header__btn">
                         <a href="join.html" class="ms-border-btn"
@@ -398,7 +401,7 @@
                           <a href="login.html"><i class="flaticon-user"></i></a>
                         </span>
                       </div>
-                    </div> -->
+                    </div>
 
                     <div class="header__hamburger">
                       <div class="sidebar__toggle">
