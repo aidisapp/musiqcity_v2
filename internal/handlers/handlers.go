@@ -414,6 +414,66 @@ func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
 }
 
+// This function handles the Signup page and renders the template
+func (m *Repository) Signup(w http.ResponseWriter, r *http.Request) {
+	userExists := m.App.Session.GetInt(r.Context(), "user_id")
+	if userExists > 0 {
+		m.App.Session.Put(r.Context(), "warning", "You are already logged in")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	render.Template(w, r, "signup.page.html", &models.TemplateData{
+		Form: forms.New(nil),
+	})
+}
+
+// This function handles the posting of user signup form
+func (m *Repository) PostSignup(w http.ResponseWriter, r *http.Request) {
+	_ = m.App.Session.Destroy(r.Context())
+	_ = m.App.Session.RenewToken(r.Context())
+
+	err := r.ParseForm()
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "Can't parse form")
+		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+		return
+	}
+
+	email := r.Form.Get("email")
+	password := r.Form.Get("password")
+
+	form := forms.New(r.PostForm)
+	form.Required("email", "password")
+	form.IsEmail("email")
+
+	if !form.Valid() {
+		stringMap := make(map[string]string)
+		stringMap["email"] = email
+		m.App.Session.Put(r.Context(), "error", "Invalid inputs")
+		render.Template(w, r, "login.page.html", &models.TemplateData{
+			Form:      form,
+			StringMap: stringMap,
+		})
+
+		return
+	}
+
+	id, _, err := m.DB.Authenticate(email, password)
+	if err != nil {
+		log.Println(err)
+
+		m.App.Session.Put(r.Context(), "error", "Invalid email/password")
+		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+
+		return
+	}
+
+	m.App.Session.Put(r.Context(), "user_id", id)
+	m.App.Session.Put(r.Context(), "flash", "Login Successful")
+	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
+}
+
 // This function logs out the user
 func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	_ = m.App.Session.Destroy(r.Context())
