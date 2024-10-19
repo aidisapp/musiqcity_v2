@@ -113,9 +113,9 @@
             </div>
             <div class="offcanvas__user mb-30 d-xxl-none">
               <div class="user__acount">
-                <span>
+                <!-- <span>
                   <a href="javascript:void(0)"><i class="flaticon-user"></i></a>
-                </span>
+                </span> -->
                 <!-- <div class="user__name-mail">
                   <h4 class="user__name">
                     <a href="javascript:void(0)">Johnson</a>
@@ -133,11 +133,39 @@
             <div class="hr-1 mt-30 mb-30 d-xl-none"></div>
             <div class="mobile-menu fix mb-30 d-xl-none"></div>
             <div class="hr-1 mt-30 mb-30 d-xl-none"></div>
-            <div class="offcanvas__btn mb-30">
+
+            {{if eq .IsAuthenticated 1}}
+            <div class="offcanvas__btn mb-10">
+              <a class="ms-border-btn" href="/user/account"
+                ><i class="flaticon-user"></i> User Profile</a
+              >
+            </div>
+
+            <div class="offcanvas__btn mb-10">
               <a class="ms-border-btn" href="/"
                 ><i class="fa-solid fa-plus"></i> List Your Service</a
               >
             </div>
+
+            <div class="offcanvas__btn mb-10">
+              <a class="ms-border-btn" href="/user/logout"
+                ><i class="fa-solid fa-right-from-bracket"></i> Logout</a
+              >
+            </div>
+            {{else}}
+            <div class="offcanvas__btn mb-10">
+              <a class="ms-border-btn" href="/user/login"
+                ><i class="flaticon-user"></i> Login</a
+              >
+            </div>
+
+            <div class="offcanvas__btn mb-10">
+              <a class="ms-border-btn" href="/user/signup"
+                ><i class="fa-solid fa-user-plus"></i> Create Account</a
+              >
+            </div>
+            {{end}}
+
             <div class="offcanvas__social">
               <div class="ms-footer-social mb-0">
                 <a
@@ -293,24 +321,32 @@
                                 </li>
                               </ul>
                             </li>
-                            
+
                             {{if eq .IsAuthenticated 1}}
                             <li class="has-dropdown">
                               <a href="javascript:void(0)">Account</a>
                               <ul class="submenu">
-                                <li><a href="/user/account">User Profile</a></li> 
-                                <li><a class="nav-link" href="/user/logout">Logout</a></li>
+                                <li>
+                                  <a href="/user/account">User Profile</a>
+                                </li>
+                                <li>
+                                  <a class="nav-link" href="/user/logout"
+                                    >Logout</a
+                                  >
+                                </li>
                               </ul>
                             </li>
-                            {{else}} 
+                            {{else}}
                             <li class="has-dropdown">
                               <a href="javascript:void(0)">Get started</a>
                               <ul class="submenu">
-                                <li><a href="/user/login">Login</a></li> 
-                                <li><a href="/user/login">Create Account</a></li>
+                                <li><a href="/user/login">Login</a></li>
+                                <li>
+                                  <a href="/user/login">Create Account</a>
+                                </li>
                               </ul>
                             </li>
-                            {{end}}                           
+                            {{end}}
                           </ul>
                         </nav>
                         <!-- for wp -->
@@ -331,7 +367,7 @@
                       <div
                         class="enquiry__list ml-10 mr-10 ms-browse-act-wrap p-relative"
                       >
-                      {{if eq .IsAuthenticated 1}}
+                        {{if eq .IsAuthenticated 1}}
                         <div
                           class="ms-enquiry-box p-relative d-none d-xl-inline-flex"
                         >
@@ -341,7 +377,7 @@
                             <span class="number">03</span></a
                           >
                         </div>
-                        
+
                         <div class="ms-browse-act-item-wrap p-absolute">
                           <div class="ms-song-item">
                             <div class="ms-song-img p-relative">
@@ -388,7 +424,7 @@
                             </div>
                           </div>
                         </div>
-                      {{end}}
+                        {{end}}
                       </div>
                       <div class="header__btn">
                         <a href="join.html" class="ms-border-btn"
@@ -475,7 +511,7 @@
                         <li><a href="/artists">China</a></li>
                         <li><a href="/artists">South Africa</a></li>
                         <li><a href="/artists">Japan</a></li>
-                        <li><a href="/artists">Singapore</a></li>                        
+                        <li><a href="/artists">Singapore</a></li>
                       </ul>
                     </div>
                   </div>
