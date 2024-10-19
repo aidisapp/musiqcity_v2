@@ -19,111 +19,80 @@
                 <div class="col-lg-6">
                   <div class="ms-input-box style-2">
                     <label>First Name</label>
-                    <input type="text" placeholder="NIck Jonas" />
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="ms-input-box style-2">
-                    <label>Last Name</label>
-                    <input type="text" placeholder="Haiden" />
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="ms-input-box style-2">
-                    <label>Agency Name *</label>
                     <input
                       type="text"
-                      placeholder="Soul Graffiti Entertainment"
+                      placeholder="Jon"
+                      class='form-control {{with .Form.Errors.Get
+                      "first_name"}} is-invalid {{end}}'
+                      id="first_name"
+                      name="first_name"
+                      value='{{index .StringMap "first_name"}}'
+                      required
                     />
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="ms-input-box style-2">
-                    <label>Service Type *</label>
-                    <select class="ms-nice-select">
-                      <option>Tidal</option>
-                      <option>Deezer</option>
-                      <option>Spotify</option>
-                      <option>iHeartRadio</option>
-                      <option>YouTube Music</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="ms-input-box style-2">
-                    <label>Service Category *</label>
-                    <select class="ms-nice-select">
-                      <option>Glastonbury Singer</option>
-                      <option>Tomorrowland Singer</option>
-                      <option>Coachella Singer</option>
-                      <option>Concert Singer</option>
-                      <option>Open Stage Singer</option>
-                      <option>Wedding Party Singer</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="ms-input-box style-2">
-                    <label>Starting From</label>
-                    <select class="ms-nice-select">
-                      <option>$125</option>
-                      <option>$150</option>
-                      <option>$175</option>
-                      <option>$200</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="ms-input-box style-2">
-                    <label>Total Team Member</label>
-                    <select class="ms-nice-select">
-                      <option>15</option>
-                      <option>20</option>
-                      <option>25</option>
-                      <option>30</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="ms-input-box style-2">
-                    <label>Location</label>
-                    <select class="ms-nice-select">
-                      <option>Oregon City</option>
-                      <option>Chicago</option>
-                      <option>Ohio</option>
-                      <option>London</option>
-                      <option>Kenia</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-lg-12">
-                  <div class="ms-input-box style-2">
-                    <label>About Agency</label>
-                    <textarea
-                      cols="30"
-                      rows="10"
-                      placeholder="We do not charge for leads. The only money you’ll..."
-                    ></textarea>
+                    <div class="invalid-feedback">
+                      {{with .Form.Errors.Get "first_name"}} {{.}} {{end}}
+                    </div>
                   </div>
                 </div>
 
-                <!-- <div class="col-lg-12">
-                  <div class="ms-input-box-file style-2">
-                    <label>Attach Cover Photo</label>
-                    <div class="ms-upload-img">
-                      <div class="ms-upload-item ms-br-15">
-                        <img
-                          src="assets/img/genres/genres-01.jpg"
-                          alt="uploaded image"
-                        />
-                      </div>
-                      <div class="ms-upload-file">
-                        <input type="file" />
-                        <i class="fas fa-plus"></i>
-                      </div>
+                <div class="col-lg-6">
+                  <div class="ms-input-box style-2">
+                    <label>Last Name</label>
+                    <input
+                      type="text"
+                      placeholder="Doe"
+                      class='form-control {{with .Form.Errors.Get
+                      "last_name"}} is-invalid {{end}}'
+                      id="last_name"
+                      name="last_name"
+                      value='{{index .StringMap "last_name"}}'
+                      required
+                    />
+
+                    <div class="invalid-feedback">
+                      {{with .Form.Errors.Get "last_name"}} {{.}} {{end}}
                     </div>
                   </div>
-                </div> -->
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="ms-input-box style-2">
+                    <label>Email</label>
+                    <input
+                      type="email"
+                      placeholder="jon@doe.com"
+                      class='form-control {{with .Form.Errors.Get
+                      "email"}} is-invalid {{end}}'
+                      id="email"
+                      name="email"
+                      value='{{index .StringMap "email"}}'
+                      required
+                    />
+
+                    <div class="invalid-feedback">
+                      {{with .Form.Errors.Get "email"}} {{.}} {{end}}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="ms-input-box style-2">
+                    <label>Password</label>
+                    <input
+                      type="password"
+                      placeholder="Doe"
+                      class='form-control {{with .Form.Errors.Get
+                      "password"}} is-invalid {{end}}'
+                      id="password"
+                      name="password"
+                      required
+                    />
+
+                    <div class="invalid-feedback">
+                      {{with .Form.Errors.Get "password"}} {{.}} {{end}}
+                    </div>
+                  </div>
+                </div>
 
                 <div class="col-lg-12">
                   <div class="ms-submit-btn mt-20">
