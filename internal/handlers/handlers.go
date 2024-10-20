@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -508,7 +509,7 @@ func (m *Repository) PostSignup(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Error loading .env file")
 	}
-	// frontendURL := os.Getenv("FRONTEND_URL")
+	frontendURL := os.Getenv("FRONTEND_URL")
 
 	// Send email notification to user
 	htmlBody := fmt.Sprintf(`
@@ -516,9 +517,9 @@ func (m *Repository) PostSignup(w http.ResponseWriter, r *http.Request) {
 	<p>Dear %s %s, </p>
 	<p>Welcome to MusiqCity.</p>
 	<strong>Kindly click the link below</strong>
-	<a href="/verify-email?userid=%d&token=%s", target="_blank">Verify Account</a>
+	<a href="%s/verify-email?userid=%d&token=%s", target="_blank">Verify Account</a>
 	<p>We hope to see you soon</p>
-	`, user.FirstName, user.LastName, newUserID, jwtToken)
+	`, user.FirstName, user.LastName, frontendURL, newUserID, jwtToken)
 
 	message := models.MailData{
 		To:      user.Email,
@@ -530,6 +531,7 @@ func (m *Repository) PostSignup(w http.ResponseWriter, r *http.Request) {
 	m.App.MailChannel <- message
 	// End of emails
 
+	m.App.Session.Put(r.Context(), "flash", "Sign up Successful!!! <br /> Please, check your email and verify your account to continue")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 

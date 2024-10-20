@@ -11629,3 +11629,8 @@ Animate Underline
 }
 
 /*# sourceMappingURL=main.css.map */
+
+/* Sweet Alert  */
+.swal2-container {
+  z-index: 9999 !important;
+}
