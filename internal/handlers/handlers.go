@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -18,6 +19,8 @@ import (
 	"github.com/aidisapp/musiqcity_v2/internal/repository"
 	"github.com/aidisapp/musiqcity_v2/internal/repository/dbrepo"
 	"github.com/go-chi/chi/v5"
+	"github.com/golang-jwt/jwt"
+	"github.com/joho/godotenv"
 )
 
 var Repo *Repository
@@ -433,25 +436,34 @@ func (m *Repository) PostSignup(w http.ResponseWriter, r *http.Request) {
 	_ = m.App.Session.Destroy(r.Context())
 	_ = m.App.Session.RenewToken(r.Context())
 
+	user := models.User{}
+	stringMap := make(map[string]string)
+
 	err := r.ParseForm()
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't parse form")
-		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+		http.Redirect(w, r, "/user/signup", http.StatusSeeOther)
 		return
 	}
 
-	email := r.Form.Get("email")
-	password := r.Form.Get("password")
+	user.FirstName = r.Form.Get("first_name")
+	user.LastName = r.Form.Get("last_name")
+	user.Email = r.Form.Get("email")
+	user.Password = r.Form.Get("password")
+	user.AccessLevel = 0
 
 	form := forms.New(r.PostForm)
-	form.Required("email", "password")
+	form.Required("first_name", "last_name", "email", "password")
+	form.MinLength("first_name", 3, 30)
+	form.MinLength("last_name", 3, 30)
 	form.IsEmail("email")
 
 	if !form.Valid() {
-		stringMap := make(map[string]string)
-		stringMap["email"] = email
+		stringMap["first_name"] = user.FirstName
+		stringMap["last_name"] = user.LastName
+		stringMap["email"] = user.Email
 		m.App.Session.Put(r.Context(), "error", "Invalid inputs")
-		render.Template(w, r, "login.page.html", &models.TemplateData{
+		render.Template(w, r, "signup.page.html", &models.TemplateData{
 			Form:      form,
 			StringMap: stringMap,
 		})
@@ -459,19 +471,150 @@ func (m *Repository) PostSignup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, _, err := m.DB.Authenticate(email, password)
+	userExist, err := m.DB.CheckIfUserEmailExist(user.Email)
 	if err != nil {
-		log.Println(err)
+		helpers.ServerError(w, err)
+		return
+	}
 
-		m.App.Session.Put(r.Context(), "error", "Invalid email/password")
-		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+	if userExist {
+		log.Println("Email exist")
+		stringMap["first_name"] = user.FirstName
+		stringMap["last_name"] = user.LastName
+		stringMap["email"] = user.Email
+		m.App.Session.Put(r.Context(), "error", "Email exist. Kindly use the forgot password form to reset your password")
+		render.Template(w, r, "signup.page.html", &models.TemplateData{
+			Form:      form,
+			StringMap: stringMap,
+		})
 
 		return
 	}
 
-	m.App.Session.Put(r.Context(), "user_id", id)
-	m.App.Session.Put(r.Context(), "flash", "Login Successful")
-	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
+	newUserID, err := m.DB.InsertUser(user)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	jwtToken, err := helpers.GenerateJWTToken(newUserID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	user.Token = jwtToken
+	m.App.Session.Put(r.Context(), "user", user)
+
+	// Load the env file and get the frontendURL
+	err = godotenv.Load()
+	if err != nil {
+		log.Println("Error loading .env file")
+	}
+	frontendURL := os.Getenv("FRONTEND_URL")
+
+	// Send email notification to user
+	htmlBody := fmt.Sprintf(`
+	<strong>Verify Your Account</strong><br />
+	<p>Dear %s %s, </p>
+	<p>Welcome to MusiqCity.</p>
+	<strong>Kindly click the link below</strong>
+	<a href="%s/verify-email?userid=%d&token=%s", target="_blank">Verify Account</a>
+	<p>We hope to see you soon</p>
+	`, user.FirstName, user.LastName, frontendURL, newUserID, jwtToken)
+
+	message := models.MailData{
+		To:      user.Email,
+		From:    "prosperdevstack@gmail.com",
+		Subject: "Verify Your Email",
+		Content: htmlBody,
+	}
+
+	m.App.MailChannel <- message
+	// End of emails
+
+	m.App.Session.Put(r.Context(), "flash", "Sign up Successful!!! <br /> Please, check your email and verify your account to continue")
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+// Load the static page and verify user email
+func (m *Repository) VerifyUserEmail(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "verfy-email.page.html", &models.TemplateData{})
+
+	// get the user id and JWT token string from the url request
+	userID, _ := strconv.Atoi(r.URL.Query().Get("userid"))
+	tokenString := r.URL.Query().Get("token")
+
+	user, err := m.DB.GetUserByID(userID)
+	if err != nil {
+		// helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Unable to fetch your account from our server. <br />Please, contact support")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// Load the env file and get the JWT secret
+	err = godotenv.Load()
+	if err != nil {
+		log.Println("Error loading .env file")
+	}
+	jwtSecret := os.Getenv("JWTSECRET")
+
+	// Parse and verify the JWT token
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// Provide the secret key used for signing the token
+		return []byte(jwtSecret), nil
+	})
+	if err != nil {
+		// Handle token parsing or verification errors
+		http.Error(w, "Unable to parse token", http.StatusBadRequest)
+		m.App.Session.Put(r.Context(), "error", fmt.Sprintf("Unable to parse token. Error: %s", err))
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// If the token is valid
+	if token.Valid {
+		// Update the user's account status as verified
+		user.AccessLevel = 1
+		err = m.DB.UpdateUserAccessLevel(user)
+		if err != nil {
+			// helpers.ServerError(w, err)
+			m.App.Session.Put(r.Context(), "error", "Unable to update user's access level. Please contact support")
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+	} else {
+		http.Error(w, "Invalid token", http.StatusBadRequest)
+		m.App.Session.Put(r.Context(), "error", fmt.Sprintf("Invalid token. Error: %s", err))
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// Handle successful email verification, Send email notification to user
+	htmlBody := fmt.Sprintf(`
+	<strong>Successful</strong><br />
+	<p>Hi %s, </p>
+	<h3>Your email has been verified.</h3>
+	<p>You can now login to your account.</p>
+	<strong>Note:<strong>
+	<p>You may still need to verify your address and identity before you can list your services on our website. <br />
+	Go to your account dashboard and verify your account by providing the required verification documents.</p>
+	<p>We hope to see you soon</p>
+	`, user.FirstName)
+
+	message := models.MailData{
+		To:      user.Email,
+		From:    "prosperdevstack@gmail.com",
+		Subject: "Email Verified",
+		Content: htmlBody,
+	}
+
+	m.App.MailChannel <- message
+	// End of emails
+
+	m.App.Session.Put(r.Context(), "flash", "Email Verification Successful!!! <br /> Please, login")
+	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 }
 
 // This function logs out the user
@@ -678,7 +821,7 @@ func (m *Repository) AdminPostReservationsCalendar(w http.ResponseWriter, r *htt
 	}
 
 	// now handle new blocks
-	for name, _ := range r.PostForm {
+	for name := range r.PostForm {
 		if strings.HasPrefix(name, "add_block") {
 			exploded := strings.Split(name, "_")
 			roomID, _ := strconv.Atoi(exploded[2])

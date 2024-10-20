@@ -2,10 +2,15 @@ package helpers
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"runtime/debug"
+	"time"
 
 	"github.com/aidisapp/musiqcity_v2/internal/config"
+	"github.com/golang-jwt/jwt/v5"
+	"github.com/joho/godotenv"
 )
 
 var app *config.AppConfig
@@ -33,4 +38,31 @@ func ServerError(responseWriter http.ResponseWriter, err error) {
 func IsAuthenticated(request *http.Request) bool {
 	exists := app.Session.Exists(request.Context(), "user_id")
 	return exists
+}
+
+func GenerateJWTToken(userID int) (string, error) {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Error loading .env file")
+	}
+
+	jwtToken := os.Getenv("JWTSECRET")
+
+	// Define the claims for the JWT token
+	claims := jwt.MapClaims{
+		"sub": userID,
+		"exp": time.Now().Add(time.Hour * 48).Unix(),
+		"iat": time.Now().Unix(),
+	}
+
+	// Generate the JWT token
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	// Sign the token with a secret key
+	tokenString, err := token.SignedString([]byte(jwtToken))
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
 }

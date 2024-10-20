@@ -12,6 +12,7 @@ type User struct {
 	Email       string
 	Password    string
 	AccessLevel int
+	Token       string
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
