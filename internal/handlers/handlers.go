@@ -18,6 +18,7 @@ import (
 	"github.com/aidisapp/musiqcity_v2/internal/repository"
 	"github.com/aidisapp/musiqcity_v2/internal/repository/dbrepo"
 	"github.com/go-chi/chi/v5"
+	"github.com/joho/godotenv"
 )
 
 var Repo *Repository
@@ -433,25 +434,33 @@ func (m *Repository) PostSignup(w http.ResponseWriter, r *http.Request) {
 	_ = m.App.Session.Destroy(r.Context())
 	_ = m.App.Session.RenewToken(r.Context())
 
+	user := models.User{}
+	stringMap := make(map[string]string)
+
 	err := r.ParseForm()
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't parse form")
-		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+		http.Redirect(w, r, "/user/signup", http.StatusSeeOther)
 		return
 	}
 
-	email := r.Form.Get("email")
-	password := r.Form.Get("password")
+	user.FirstName = r.Form.Get("first_name")
+	user.LastName = r.Form.Get("last_name")
+	user.Email = r.Form.Get("email")
+	user.Password = r.Form.Get("password")
 
 	form := forms.New(r.PostForm)
-	form.Required("email", "password")
+	form.Required("first_name", "last_name", "email", "password")
+	form.MinLength("first_name", 3, 30)
+	form.MinLength("last_name", 3, 30)
 	form.IsEmail("email")
 
 	if !form.Valid() {
-		stringMap := make(map[string]string)
-		stringMap["email"] = email
+		stringMap["first_name"] = user.FirstName
+		stringMap["last_name"] = user.LastName
+		stringMap["email"] = user.Email
 		m.App.Session.Put(r.Context(), "error", "Invalid inputs")
-		render.Template(w, r, "login.page.html", &models.TemplateData{
+		render.Template(w, r, "signup.page.html", &models.TemplateData{
 			Form:      form,
 			StringMap: stringMap,
 		})
@@ -459,19 +468,69 @@ func (m *Repository) PostSignup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, _, err := m.DB.Authenticate(email, password)
+	userExist, err := m.DB.CheckIfUserEmailExist(user.Email)
 	if err != nil {
-		log.Println(err)
+		helpers.ServerError(w, err)
+		return
+	}
 
-		m.App.Session.Put(r.Context(), "error", "Invalid email/password")
-		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+	if userExist {
+		log.Println("Email exist")
+		stringMap["first_name"] = user.FirstName
+		stringMap["last_name"] = user.LastName
+		stringMap["email"] = user.Email
+		m.App.Session.Put(r.Context(), "error", "Email exist. Kindly use the forgot password form to reset your password")
+		render.Template(w, r, "signup.page.html", &models.TemplateData{
+			Form:      form,
+			StringMap: stringMap,
+		})
 
 		return
 	}
 
-	m.App.Session.Put(r.Context(), "user_id", id)
-	m.App.Session.Put(r.Context(), "flash", "Login Successful")
-	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
+	newUserID, err := m.DB.InsertUser(user)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	jwtToken, err := helpers.GenerateJWTToken(newUserID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	user.Token = jwtToken
+	m.App.Session.Put(r.Context(), "user", user)
+
+	// Load the env file and get the frontendURL
+	err = godotenv.Load()
+	if err != nil {
+		log.Println("Error loading .env file")
+	}
+	// frontendURL := os.Getenv("FRONTEND_URL")
+
+	// Send email notification to user
+	htmlBody := fmt.Sprintf(`
+	<strong>Verify Your Account</strong><br />
+	<p>Dear %s %s, </p>
+	<p>Welcome to MusiqCity.</p>
+	<strong>Kindly click the link below</strong>
+	<a href="/verify-email?userid=%d&token=%s", target="_blank">Verify Account</a>
+	<p>We hope to see you soon</p>
+	`, user.FirstName, user.LastName, newUserID, jwtToken)
+
+	message := models.MailData{
+		To:      user.Email,
+		From:    "prosperdevstack@gmail.com",
+		Subject: "Verify Your Email",
+		Content: htmlBody,
+	}
+
+	m.App.MailChannel <- message
+	// End of emails
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 // This function logs out the user

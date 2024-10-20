@@ -8,6 +8,8 @@ import (
 
 type DatabaseRepo interface {
 	AllUsers() bool
+	CheckIfUserEmailExist(email string) (bool, error)
+	InsertUser(user models.User) (int, error)
 
 	InsertReservation(res models.Reservation) (int, error)
 	InsertRoomRestriction(res models.RoomRestriction) error

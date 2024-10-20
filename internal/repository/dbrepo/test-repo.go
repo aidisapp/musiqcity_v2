@@ -11,6 +11,18 @@ func (repo *testDBRepo) AllUsers() bool {
 	return true
 }
 
+// Check if a user exists in the database via email
+func (m *testDBRepo) CheckIfUserEmailExist(email string) (bool, error) {
+	return true, nil
+}
+
+// Inserts a user into the database
+func (m *testDBRepo) InsertUser(user models.User) (int, error) {
+	var newUserID int
+
+	return newUserID, nil
+}
+
 // Inserts a reservation into the database
 func (repo *testDBRepo) InsertReservation(res models.Reservation) (int, error) {
 	// Fail test if the room_id == 2

@@ -34,6 +34,57 @@ func (repo *postgresDBRepo) Authenticate(email, testPassword string) (int, strin
 	return id, hashedPassword, nil
 }
 
+// Check if a user exists in the database via email
+func (m *postgresDBRepo) CheckIfUserEmailExist(email string) (bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var numRows int
+
+	query := `
+		select
+			count(id)
+		from
+			users
+		where
+			email = $1`
+
+	row := m.DB.QueryRowContext(ctx, query, email)
+	err := row.Scan(&numRows)
+	if err != nil {
+		return false, err
+	}
+
+	if numRows == 0 {
+		return false, nil
+	}
+
+	return true, nil
+}
+
+// Inserts a user into the database
+func (m *postgresDBRepo) InsertUser(user models.User) (int, error) {
+	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var newUserID int
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+	if err != nil {
+		return 0, err
+	}
+
+	query := `insert into users (first_name, last_name, email, password, created_at, updated_at) values ($1, $2, $3, $4, $5, $6) returning id`
+
+	err = m.DB.QueryRowContext(context, query, user.FirstName, user.LastName, user.Email, hashedPassword, time.Now(), time.Now()).Scan(&newUserID)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return newUserID, nil
+}
+
 func (repo *postgresDBRepo) AllUsers() bool {
 	return true
 }
