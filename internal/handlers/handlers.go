@@ -539,8 +539,6 @@ func (m *Repository) PostSignup(w http.ResponseWriter, r *http.Request) {
 
 // Load the static page and verify user email
 func (m *Repository) VerifyUserEmail(w http.ResponseWriter, r *http.Request) {
-	data := make(map[string]interface{})
-
 	render.Template(w, r, "verfy-email.page.html", &models.TemplateData{})
 
 	// get the user id and JWT token string from the url request
@@ -549,8 +547,8 @@ func (m *Repository) VerifyUserEmail(w http.ResponseWriter, r *http.Request) {
 
 	user, err := m.DB.GetUserByID(userID)
 	if err != nil {
-		helpers.ServerError(w, err)
-		m.App.Session.Put(r.Context(), "error", "Unable to fetch your account from our server")
+		// helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Unable to fetch your account from our server. <br />Please, contact support")
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
@@ -581,14 +579,13 @@ func (m *Repository) VerifyUserEmail(w http.ResponseWriter, r *http.Request) {
 		user.AccessLevel = 1
 		err = m.DB.UpdateUserAccessLevel(user)
 		if err != nil {
-			helpers.ServerError(w, err)
+			// helpers.ServerError(w, err)
 			m.App.Session.Put(r.Context(), "error", "Unable to update user's access level. Please contact support")
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		}
 	} else {
 		http.Error(w, "Invalid token", http.StatusBadRequest)
-		data["error"] = fmt.Sprintf("Invalid token. Error: %s", err)
 		m.App.Session.Put(r.Context(), "error", fmt.Sprintf("Invalid token. Error: %s", err))
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
@@ -616,10 +613,8 @@ func (m *Repository) VerifyUserEmail(w http.ResponseWriter, r *http.Request) {
 	m.App.MailChannel <- message
 	// End of emails
 
-	data["message"] = "Successful"
-	out, _ := json.MarshalIndent(data, "", "    ")
-	resp := []byte(out)
-	w.Write(resp)
+	m.App.Session.Put(r.Context(), "flash", "Email Verification Successful!!! <br /> Please, login")
+	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 }
 
 // This function logs out the user

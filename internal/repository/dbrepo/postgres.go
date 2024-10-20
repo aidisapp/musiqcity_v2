@@ -74,15 +74,33 @@ func (m *postgresDBRepo) InsertUser(user models.User) (int, error) {
 		return 0, err
 	}
 
-	query := `insert into users (first_name, last_name, email, password, created_at, updated_at) values ($1, $2, $3, $4, $5, $6) returning id`
+	query := `insert into users (first_name, last_name, email, password, access_level, created_at, updated_at) values ($1, $2, $3, $4, $5, $6, $7) returning id`
 
-	err = m.DB.QueryRowContext(context, query, user.FirstName, user.LastName, user.Email, hashedPassword, time.Now(), time.Now()).Scan(&newUserID)
+	err = m.DB.QueryRowContext(context, query, user.FirstName, user.LastName, user.Email, hashedPassword, user.AccessLevel, time.Now(), time.Now()).Scan(&newUserID)
 
 	if err != nil {
 		return 0, err
 	}
 
 	return newUserID, nil
+}
+
+// UpdateUserAccessLevel updates a user access level in the database
+func (m *postgresDBRepo) UpdateUserAccessLevel(user models.User) error {
+	context, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	query := `
+		update users set access_level = $1, updated_at = $2 where id = $3
+	`
+
+	_, err := m.DB.ExecContext(context, query, user.AccessLevel, time.Now(), user.ID)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (repo *postgresDBRepo) AllUsers() bool {

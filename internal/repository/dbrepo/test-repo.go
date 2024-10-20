@@ -23,6 +23,11 @@ func (m *testDBRepo) InsertUser(user models.User) (int, error) {
 	return newUserID, nil
 }
 
+// UpdateUserAccessLevel updates a user access level in the database
+func (m *testDBRepo) UpdateUserAccessLevel(user models.User) error {
+	return nil
+}
+
 // Inserts a reservation into the database
 func (repo *testDBRepo) InsertReservation(res models.Reservation) (int, error) {
 	// Fail test if the room_id == 2
