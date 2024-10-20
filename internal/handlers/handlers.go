@@ -19,6 +19,7 @@ import (
 	"github.com/aidisapp/musiqcity_v2/internal/repository"
 	"github.com/aidisapp/musiqcity_v2/internal/repository/dbrepo"
 	"github.com/go-chi/chi/v5"
+	"github.com/golang-jwt/jwt"
 	"github.com/joho/godotenv"
 )
 
@@ -449,6 +450,7 @@ func (m *Repository) PostSignup(w http.ResponseWriter, r *http.Request) {
 	user.LastName = r.Form.Get("last_name")
 	user.Email = r.Form.Get("email")
 	user.Password = r.Form.Get("password")
+	user.AccessLevel = 0
 
 	form := forms.New(r.PostForm)
 	form.Required("first_name", "last_name", "email", "password")
@@ -533,6 +535,91 @@ func (m *Repository) PostSignup(w http.ResponseWriter, r *http.Request) {
 
 	m.App.Session.Put(r.Context(), "flash", "Sign up Successful!!! <br /> Please, check your email and verify your account to continue")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+// Load the static page and verify user email
+func (m *Repository) VerifyUserEmail(w http.ResponseWriter, r *http.Request) {
+	data := make(map[string]interface{})
+
+	render.Template(w, r, "verfy-email.page.html", &models.TemplateData{})
+
+	// get the user id and JWT token string from the url request
+	userID, _ := strconv.Atoi(r.URL.Query().Get("userid"))
+	tokenString := r.URL.Query().Get("token")
+
+	user, err := m.DB.GetUserByID(userID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Unable to fetch your account from our server")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// Load the env file and get the JWT secret
+	err = godotenv.Load()
+	if err != nil {
+		log.Println("Error loading .env file")
+	}
+	jwtSecret := os.Getenv("JWTSECRET")
+
+	// Parse and verify the JWT token
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// Provide the secret key used for signing the token
+		return []byte(jwtSecret), nil
+	})
+	if err != nil {
+		// Handle token parsing or verification errors
+		http.Error(w, "Unable to parse token", http.StatusBadRequest)
+		m.App.Session.Put(r.Context(), "error", fmt.Sprintf("Unable to parse token. Error: %s", err))
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// If the token is valid
+	if token.Valid {
+		// Update the user's account status as verified
+		user.AccessLevel = 1
+		err = m.DB.UpdateUserAccessLevel(user)
+		if err != nil {
+			helpers.ServerError(w, err)
+			m.App.Session.Put(r.Context(), "error", "Unable to update user's access level. Please contact support")
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+	} else {
+		http.Error(w, "Invalid token", http.StatusBadRequest)
+		data["error"] = fmt.Sprintf("Invalid token. Error: %s", err)
+		m.App.Session.Put(r.Context(), "error", fmt.Sprintf("Invalid token. Error: %s", err))
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	// Handle successful email verification, Send email notification to user
+	htmlBody := fmt.Sprintf(`
+	<strong>Successful</strong><br />
+	<p>Hi %s, </p>
+	<h3>Your email has been verified.</h3>
+	<p>You can now login to your account.</p>
+	<strong>Note:<strong>
+	<p>You may still need to verify your address and identity before you can list your services on our website. <br />
+	Go to your account dashboard and verify your account by providing the required verification documents.</p>
+	<p>We hope to see you soon</p>
+	`, user.FirstName)
+
+	message := models.MailData{
+		To:      user.Email,
+		From:    "prosperdevstack@gmail.com",
+		Subject: "Email Verified",
+		Content: htmlBody,
+	}
+
+	m.App.MailChannel <- message
+	// End of emails
+
+	data["message"] = "Successful"
+	out, _ := json.MarshalIndent(data, "", "    ")
+	resp := []byte(out)
+	w.Write(resp)
 }
 
 // This function logs out the user

@@ -33,6 +33,7 @@ func routes(_ *config.AppConfig) http.Handler {
 	mux.Post("/user/login", handlers.Repo.PostLogin)
 	mux.Get("/user/signup", handlers.Repo.Signup)
 	mux.Post("/user/signup", handlers.Repo.PostSignup)
+	mux.Get("/verify-email", handlers.Repo.VerifyUserEmail)
 	mux.Get("/user/logout", handlers.Repo.Logout)
 
 	fileServer := http.FileServer(http.Dir("./static/"))
