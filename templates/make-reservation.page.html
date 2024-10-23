@@ -28,12 +28,9 @@ define "css" }}
 
     <div class="col-md-8 mb-md-0 mb-5">
       <form action="/make-reservation" method="post" class="row g-3" novalidate>
+        <!--Input fields  adjusted to use oneline for readbility. -->
         <input type="hidden" name="room_id" value="{{$reservation.RoomID}}" />
-        <input
-          type="hidden"
-          name="start_date"
-          value='{{index .StringMap "start_date"}}'
-        />
+        <input type="hidden" name="start_date" value='{{index .StringMap "start_date"}}'/>
         <input type="hidden" name="end_date" value='{{index .StringMap "end_date"}}'/>
 
         <!-- needs-validation -->
