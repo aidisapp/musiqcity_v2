@@ -46,6 +46,7 @@ define "css" }}
           <input type="text" class='form-control {{with .Form.Errors.Get
           "first_name"}} is-invalid {{end}}' id="first-name" name="first_name"
           value="{{$reservation.FirstName}}" required />
+          <!--message to be displayed to user if field values are correct-->
           <div class="valid-feedback">Looks good!</div>
           <div class="invalid-feedback">
             {{with .Form.Errors.Get "first_name"}} {{.}} {{end}}
