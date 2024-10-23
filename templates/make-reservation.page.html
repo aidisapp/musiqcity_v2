@@ -11,11 +11,12 @@ define "css" }}
     Make Reservation
   </h2>
 
+    <!--Reservation-->
   <h4 class="h3-responsive font-weight-bold text-center mt-2">
     Reservation Details
   </h4>
   <p class="text-center">
-    Room name: {{$reservation.Room.RoomName}}<br />
+    Room name: {{$reservation.Room.RoomName}} <br />
     Arrival date: {{humanDate $reservation.StartDate}}<br />
     Departure date: {{humanDate $reservation.EndDate}}
   </p>
