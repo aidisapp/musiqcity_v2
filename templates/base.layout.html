@@ -134,13 +134,13 @@
             <div class="mobile-menu fix mb-30 d-xl-none"></div>
             <div class="hr-1 mt-30 mb-30 d-xl-none"></div>
 
-            {{if eq .IsAuthenticated 1}}
+            {{if eq .IsAdmin 1}}
             <div class="offcanvas__btn mb-10">
               <a class="ms-border-btn" href="/admin/dashboard"
-                ><i class="flaticon-user"></i> User Profile</a
+                ><i class="flaticon-user"></i> Dashboard</a
               >
             </div>
-
+            {{end}} {{if eq .IsAuthenticated 1}}
             <div class="offcanvas__btn mb-10">
               <a class="ms-border-btn" href="/"
                 ><i class="fa-solid fa-plus"></i> List Your Service</a
@@ -326,8 +326,13 @@
                             <li class="has-dropdown">
                               <a href="javascript:void(0)">Account</a>
                               <ul class="submenu">
+                                {{if eq .IsAdmin 1}}
                                 <li>
-                                  <a href="/admin/dashboard">User Profile</a>
+                                  <a href="/admin/dashboard">Dashboard</a>
+                                </li>
+                                {{end}}
+                                <li>
+                                  <a href="/">List your services</a>
                                 </li>
                                 <li>
                                   <a class="nav-link" href="/user/logout"

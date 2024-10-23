@@ -13,5 +13,5 @@ type TemplateData struct {
 	Error           string
 	Form            *forms.Form
 	IsAuthenticated int
-	isAdmin         int
+	IsAdmin         int
 }
