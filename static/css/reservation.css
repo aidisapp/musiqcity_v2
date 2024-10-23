@@ -43,3 +43,17 @@ body {
     bottom: 0;
     width: 100%;
 }
+
+
+.other-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.other-action-button {
+    color: gray;
+    text-decoration: none;
+}
+ 
