@@ -332,7 +332,7 @@
                                 </li>
                                 {{end}}
                                 <li>
-                                  <a href="/">List your services</a>
+                                  <button class="ms-model-show">List your services</button>
                                 </li>
                                 <li>
                                   <a class="nav-link" href="/user/logout"
@@ -592,6 +592,233 @@
       </footer>
       <!-- Footer Area End Here  -->
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade ms-model1 zindex-99999" id="ms-model">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="ms-genres-model-content">
+              <div class="ms-genres-top text-center mb-50">
+                <button type="button" class="ms-model-close ms-close-btn">
+                  <i class="fa-sharp fa-solid fa-xmark"></i>
+                </button>
+                <h2 class="ms-title2 white-text mb-20">List Your Services</h2>
+                <p class="ms-text2">Rock &amp; pop wedding &amp; party band</p>
+              </div>
+              <div class="ms-genres-enquire-form">
+                <form action="#">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="ms-input-box">
+                        <label>First Name</label>
+                        <input type="text" placeholder="David" />
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="ms-input-box">
+                        <label>Last Name</label>
+                        <input type="text" placeholder="Smith boe" />
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="ms-input-box">
+                        <label>Email Address</label>
+                        <input type="email" placeholder="info.mail@gmail.com" />
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="ms-input-box">
+                        <label>Phone Number</label>
+                        <input type="text" placeholder="+ 91 026 3259 2032" />
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="ms-input-box">
+                        <label>Event Date</label>
+                        <input
+                          type="text"
+                          class="ms-datepicker"
+                          placeholder="25 / 03 / 2023"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="ms-input-box">
+                        <label>Event Type</label>
+                        <select class="ms-nice-select">
+                          <option>Choose Event</option>
+                          <option>Clare Culture Night</option>
+                          <option>Ensemble Cupar</option>
+                          <option>Live Music</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="ms-input-box">
+                        <label>Event Location</label>
+                        <textarea
+                          cols="30"
+                          rows="10"
+                          placeholder="unction Central, 86-90 Paul Street, London, EC2A 4NE United State of America."
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="ms-input-box">
+                        <label>Write Something</label>
+                        <textarea
+                          cols="30"
+                          rows="10"
+                          placeholder="Outstanding wedd ing band playing chart, indie, rock anthems."
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="row align-items-center">
+                        <div class="col-lg-6">
+                          <div class="ms-checkbox">
+                            <span
+                              >I Read Your
+                              <a href="#">Terms And Conditions</a> Also
+                              <a href="#">Privacy Policy</a></span
+                            >
+                            <input type="checkbox" id="flexCheckChecked" />
+                            <label
+                              class="checkmark"
+                              for="flexCheckChecked"
+                            ></label>
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="ms-submit-btn text-lg-end mb-10">
+                            <button type="submit" class="unfill__btn">
+                              Send enquiry
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade ms-model2 zindex-99999" id="ms-model2">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="ms-genres-model-content">
+              <div class="ms-genres-review-wrap">
+                <div class="ms-review-popup-title-wrap pb-30 mb-35 ms-border2">
+                  <div class="ms-review-popup-item">
+                    <span class="ms-review-num">4.95</span>
+                    <span class="ms-review-star">
+                      <i class="flaticon-star"></i>
+                      <i class="flaticon-star"></i>
+                      <i class="flaticon-star"></i>
+                      <i class="flaticon-star unrate"></i>
+                      <i class="flaticon-star unrate"></i>
+                    </span>
+                  </div>
+                  <div class="ms-review-popup-item">
+                    <h4 class="ms-title3 white-text">Write A Review</h4>
+                  </div>
+                  <div class="ms-review-popup-item text-md-end">
+                    <button type="button" class="ms-model2-close">
+                      <i class="fa-sharp fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="ms-review-form">
+                  <form action="#">
+                    <div class="ms-popup-rating d-flex">
+                      <div class="row">
+                        <div class="col-xl-12 mb-35">
+                          <div class="d-flex flex-wrap">
+                            <span class="ms-title3 white-text mr-30 mb-20"
+                              >Ratting :</span
+                            >
+                            <div class="df-rating mb-20">
+                              <label>
+                                <input type="radio" name="rating" value="1" />
+                                <span class="icon">★</span>
+                              </label>
+                              <label>
+                                <input type="radio" name="rating" value="2" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                              </label>
+                              <label>
+                                <input type="radio" name="rating" value="3" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                              </label>
+                              <label>
+                                <input type="radio" name="rating" value="4" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                              </label>
+                              <label>
+                                <input type="radio" name="rating" value="5" />
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                                <span class="icon">★</span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-6">
+                          <div class="ms-input-box two">
+                            <input type="text" placeholder="Your Name" />
+                          </div>
+                        </div>
+                        <div class="col-xl-6">
+                          <div class="ms-input-box two">
+                            <select class="ms-nice-select">
+                              <option>Choose Event</option>
+                              <option>Clare Culture Night</option>
+                              <option>Ensemble Cupar</option>
+                              <option>Live Music</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-xl-12">
+                          <div class="ms-input-box two">
+                            <textarea
+                              cols="30"
+                              rows="10"
+                              placeholder="Write Something . . ."
+                            ></textarea>
+                          </div>
+                        </div>
+                        <div class="col-xl-12">
+                          <div class="ms-review-submit-btn text-center">
+                            <button type="submit" class="unfill__btn">
+                              Post review
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
 
     <!-- Back to top start -->
     <div class="progress-wrap">
