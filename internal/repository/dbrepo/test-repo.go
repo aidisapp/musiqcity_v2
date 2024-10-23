@@ -74,8 +74,8 @@ func (repo *testDBRepo) UpdateUser(user models.User) error {
 }
 
 // Authenticate authenticates a user
-func (repo *testDBRepo) Authenticate(email, testPassword string) (int, string, error) {
-	return 1, "", nil
+func (repo *testDBRepo) Authenticate(email, testPassword string) (int, string, int, error) {
+	return 1, "", 0, nil
 }
 
 // AllReservations returns a slice of all reservations
