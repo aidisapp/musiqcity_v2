@@ -48,9 +48,7 @@ define "css" }}
 
         <div class="col-md-6">
           <label for="last-name" class="form-label">Last name</label>
-          <input type="text" class='form-control {{with .Form.Errors.Get
-          "last_name"}} is-invalid {{end}}' id="last-name" name="last_name"
-          value="{{$reservation.LastName}}" required />
+          <input type="text" class='form-control {{with .Form.Errors.Get "last_name"}} is-invalid {{end}}' id="last-name" name="last_name" value="{{$reservation.LastName}}" required />
           <div class="valid-feedback">Looks good!</div>
           <div class="invalid-feedback">
             {{with .Form.Errors.Get "last_name"}} {{.}} {{end}}
