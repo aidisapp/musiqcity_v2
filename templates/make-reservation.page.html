@@ -68,9 +68,7 @@ define "css" }}
 
         <div class="col-md-6">
           <label for="phone" class="form-label">Phone number</label>
-          <input type="number" class='form-control {{with .Form.Errors.Get
-          "phone"}} is-invalid {{end}}' id="phone" name="phone"
-          value="{{$reservation.Phone}}" required />
+          <input type="number" class='form-control {{with .Form.Errors.Get "phone"}} is-invalid {{end}}' id="phone" name="phone" value="{{$reservation.Phone}}" required />
           <div class="invalid-feedback">
             {{with .Form.Errors.Get "phone"}} {{.}} {{end}}
           </div>
