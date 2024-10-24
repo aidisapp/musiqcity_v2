@@ -1,0 +1,143 @@
+{{ template "base" .}} {{ define "title" }} Signup {{ end }} {{ define "css" }}
+{{ end }} {{ define "content" }}
+<!-- Sign up page  -->
+
+<div class="ms-all-content ms-all-content-space">
+  <!-- Join Area Start Here  -->
+  <section class="ms-join-area p-relative">
+    <div class="ms-join-position p-absolute text-center">
+      <h2 class="ms-title2 white-text">Join Us</h2>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="ms-join-wrap ms-join-space mb-70 ms-bg-2">
+            <div class="ms-genres-top text-center mb-50">
+              <h2 class="ms-title2 white-text mb-20">List Your Services</h2>
+              <p class="ms-text2">Fill the below form with accurately</p>
+            </div>
+
+            <div class="ms-genres-enquire-form">
+              <form
+                action="/admin/artists/new-artist"
+                method="post"
+                class="row g-3 main-form"
+              >
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="ms-input-box">
+                      <label>Artist/Group Name</label>
+                      <input
+                        type="text"
+                        placeholder="Jon"
+                        class='form-control {{with .Form.Errors.Get
+                        "artist_name"}} is-invalid {{end}}'
+                        id="artist-name"
+                        name="artist_name"
+                        value="{{$artist.Name}}"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        {{with .Form.Errors.Get "artist_name"}} {{.}} {{end}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6">
+                    <div class="ms-input-box">
+                      <label for="genres" class="form-label">Genres</label>
+                      <input
+                        type="text"
+                        placeholder="Doe"
+                        class='form-control {{with .Form.Errors.Get
+                        "genres"}} is-invalid {{end}}'
+                        id="genres"
+                        name="genres"
+                        value="{{$artist.Genres}}"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        {{with .Form.Errors.Get "genres"}} {{.}} {{end}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <div class="ms-input-box">
+                      <label for="phone" class="form-label">Phone</label>
+                      <input
+                        type="text"
+                        class='form-control {{with .Form.Errors.Get "phone"}} is-invalid {{end}}'
+                        id="phone"
+                        name="phone"
+                        value="{{$artist.Phone}}"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        {{with .Form.Errors.Get "phone"}} {{.}} {{end}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <div class="ms-input-box">
+                      <label for="email" class="form-label">Email</label>
+                      <input
+                        type="text"
+                        class='form-control {{with .Form.Errors.Get "email"}} is-invalid {{end}}'
+                        id="email"
+                        name="email"
+                        value="{{$artist.Email}}"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        {{with .Form.Errors.Get "email"}} {{.}} {{end}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                    <div class="ms-input-box">
+                      <label for="city" class="form-label">City</label>
+                      <input
+                        type="text"
+                        class='form-control {{with .Form.Errors.Get "city"}} is-invalid {{end}}'
+                        id="city"
+                        name="city"
+                        value="{{$artist.City}}"
+                        required
+                      />
+                      <div class="invalid-feedback">
+                        {{with .Form.Errors.Get "city"}} {{.}} {{end}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Join Area End Here  -->
+</div>
+
+{{ end }} {{define "js"}}
+<script>
+  const togglePassword = document.querySelector("#togglePassword");
+  const password = document.querySelector("#password");
+
+  togglePassword.addEventListener("click", function () {
+    // Toggle the type attribute
+    const type =
+      password.getAttribute("type") === "password" ? "text" : "password";
+    password.setAttribute("type", type);
+
+    // Toggle the icon
+    this.classList.toggle("fa-eye");
+    this.classList.toggle("fa-eye-slash");
+  });
+</script>
+{{end}}
