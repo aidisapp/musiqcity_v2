@@ -27,9 +27,9 @@ func SessionLoad(next http.Handler) http.Handler {
 
 func Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if !helpers.IsAuthenticated(r) {
-			session.Put(r.Context(), "error", "Please login to your account!!!")
-			http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+		if !helpers.IsAdmin(r) {
+			session.Put(r.Context(), "error", "You do not have access to this page!!!")
+			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		}
 

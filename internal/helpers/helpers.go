@@ -40,6 +40,12 @@ func IsAuthenticated(request *http.Request) bool {
 	return exists
 }
 
+// Check if a user is admin
+func IsAdmin(request *http.Request) bool {
+	accessLevel := app.Session.GetInt(request.Context(), "access_level")
+	return accessLevel == 3
+}
+
 func GenerateJWTToken(userID int) (string, error) {
 	err := godotenv.Load()
 	if err != nil {

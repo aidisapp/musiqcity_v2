@@ -402,7 +402,7 @@ func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, _, err := m.DB.Authenticate(email, password)
+	id, _, access_level, err := m.DB.Authenticate(email, password)
 	if err != nil {
 		log.Println(err)
 
@@ -413,8 +413,9 @@ func (m *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	m.App.Session.Put(r.Context(), "user_id", id)
+	m.App.Session.Put(r.Context(), "access_level", access_level)
 	m.App.Session.Put(r.Context(), "flash", "Login Successful")
-	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 // This function handles the Signup page and renders the template

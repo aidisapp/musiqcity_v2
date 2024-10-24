@@ -621,6 +621,14 @@
 		e.preventDefault();
 	});
 
+	$('.service-model-close').on('click', function () {
+		$('#ms-model').modal('hide');
+	});
+	$('.service-model-show').on('click', function (e) {
+		$('#ms-model').modal('show');
+		e.preventDefault();
+	});
+
 	$('.ms-model2-close').on('click', function () {
 		$('#ms-model2').modal('hide')
 	});
