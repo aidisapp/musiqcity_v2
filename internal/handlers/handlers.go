@@ -1452,3 +1452,88 @@ func (m *Repository) PostAdminSingleOption(w http.ResponseWriter, r *http.Reques
 	m.App.Session.Put(r.Context(), "flash", "Booking Option Updated Successsfully!!!")
 	http.Redirect(w, r, "/admin/booking-options", http.StatusSeeOther)
 }
+
+// This function handles the ListService page and renders the template
+func (m *Repository) ListService(w http.ResponseWriter, r *http.Request) {
+	userExists := m.App.Session.GetInt(r.Context(), "user_id")
+	if userExists < 1 {
+		m.App.Session.Put(r.Context(), "warning", "You must be logged in")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	
+	render.Template(w, r, "list-service.page.html", &models.TemplateData{
+		Form: forms.New(nil),
+	})
+}
+
+// This function handles the posting of ListService form
+func (m *Repository) PostListService(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	var artist models.Artist
+
+	artist.Name = r.Form.Get("artist_name")
+	artist.Genres = r.Form.Get("genres")
+	artist.Description = r.Form.Get("description")
+	artist.Phone = r.Form.Get("phone")
+	artist.Email = r.Form.Get("email")
+	artist.City = r.Form.Get("city")
+	artist.Facebook = r.Form.Get("facebook")
+	artist.Twitter = r.Form.Get("twitter")
+	artist.Youtube = r.Form.Get("youtube")
+	artist.Logo = r.Form.Get("logo")
+	artist.Banner = r.Form.Get("banner")
+	artist.FeaturedImage = r.Form.Get("featured_image")
+
+	// Form validations
+	form := forms.New(r.PostForm)
+	form.Required("artist_name", "genres", "description", "phone", "email")
+	form.MinLength("artist_name", 5, 50)
+	form.MinLength("description", 5, 20000)
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["artist"] = artist
+		m.App.Session.Put(r.Context(), "error", "Invalid form input")
+		render.Template(w, r, "list-service.page.html", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+		return
+	}
+
+	// Load the env file and get the frontendURL
+	// err = godotenv.Load()
+	// if err != nil {
+	// 	log.Println("Error loading .env file")
+	// }
+	// frontendURL := os.Getenv("FRONTEND_URL")
+
+	// Send email notification to user
+	// htmlBody := fmt.Sprintf(`
+	// <strong>Verify Your Account</strong><br />
+	// <p>Dear %s %s, </p>
+	// <p>Welcome to MusiqCity.</p>
+	// <strong>Kindly click the link below</strong>
+	// <a href="%s/verify-email?userid=%d&token=%s", target="_blank">Verify Account</a>
+	// <p>We hope to see you soon</p>
+	// `, user.FirstName, user.LastName, frontendURL, newUserID, jwtToken)
+
+	// message := models.MailData{
+	// 	To:      user.Email,
+	// 	From:    "prosperdevstack@gmail.com",
+	// 	Subject: "Verify Your Email",
+	// 	Content: htmlBody,
+	// }
+
+	// m.App.MailChannel <- message
+	// End of emails
+
+	m.App.Session.Put(r.Context(), "flash", "Sign up Successful!!! <br /> Please, check your email and verify your account to continue")
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
