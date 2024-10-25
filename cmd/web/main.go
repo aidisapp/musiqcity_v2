@@ -62,11 +62,10 @@ func run() (*driver.DB, error) {
 
 	// Things to be stored in the session
 	// gob, is a built in library used for storing sessions
-	gob.Register(models.Reservation{})
+	gob.Register(models.Bookings{})
 	gob.Register(models.User{})
-	gob.Register(models.Room{})
-	gob.Register(models.Restriction{})
-	gob.Register(models.TodoList{})
+	gob.Register(models.Artist{})
+	gob.Register(models.BookingOptions{})
 	gob.Register(make(map[string]int))
 
 	err := godotenv.Load()

@@ -18,7 +18,7 @@ var testApp config.AppConfig
 
 func TestMain(mainTest *testing.M) {
 
-	gob.Register(models.Reservation{})
+	gob.Register(models.Bookings{})
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	testApp.InfoLog = infoLog

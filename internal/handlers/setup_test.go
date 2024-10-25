@@ -33,11 +33,10 @@ var functions = template.FuncMap{
 
 func TestMain(m *testing.M) {
 	// what am I going to put in the session
-	gob.Register(models.Reservation{})
+	gob.Register(models.Bookings{})
 	gob.Register(models.User{})
-	gob.Register(models.Room{})
-	gob.Register(models.Restriction{})
-	gob.Register(models.TodoList{})
+	gob.Register(models.Artist{})
+	gob.Register(models.BookingOptions{})
 	gob.Register(map[string]int{})
 
 	// change this to true when in production
@@ -98,34 +97,11 @@ func getRoutes() http.Handler {
 	mux.Get("/about", Repo.About)
 	mux.Get("/contact", Repo.Contact)
 
-	mux.Post("/reservation-json", Repo.AvailabilityJSON)
-
-	mux.Get("/make-reservation", Repo.MakeReservation)
-	mux.Post("/make-reservation", Repo.PostMakeReservation)
-	mux.Get("/reservation-summary", Repo.ReservationSummary)
-
 	mux.Get("/user/login", Repo.Login)
 	mux.Post("/user/login", Repo.PostLogin)
 	mux.Get("/user/logout", Repo.Logout)
 
 	mux.Get("/dashboard", Repo.AdminDashboard)
-
-	mux.Get("/reservations-calendar", Repo.AdminReservationsCalendar)
-	mux.Post("/reservations-calendar", Repo.AdminPostReservationsCalendar)
-
-	mux.Get("/admin/rooms", Repo.AdminAllRooms)
-	mux.Get("/admin/rooms/{id}", Repo.AdminSingleRoom)
-	mux.Post("/admin/rooms/{id}", Repo.PostAdminSingleRoom)
-	mux.Get("/admin/rooms/new-room", Repo.AdminNewRoom)
-	mux.Post("/admin/rooms/new-room", Repo.PostAdminNewRoom)
-	mux.Get("/admin/delete-room/{id}", Repo.AdminDeleteRoom)
-
-	mux.Get("/admin/process-reservation/{src}/{id}/do", Repo.AdminProcessReservation)
-	mux.Get("/admin/delete-reservation/{src}/{id}/do", Repo.AdminDeleteReservation)
-
-	mux.Get("/admin/todo-list", Repo.AdminTodoList)
-	mux.Post("/admin/todo-list", Repo.PostAdminTodoList)
-	mux.Get("/admin/delete-todo/{id}", Repo.AdminDeleteTodo)
 
 	mux.Post("/admin/rooms/new-artist", Repo.PostAdminNewArtist)
 

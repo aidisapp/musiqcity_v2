@@ -23,11 +23,7 @@ func routes(_ *config.AppConfig) http.Handler {
 	mux.Get("/about", handlers.Repo.About)
 	mux.Get("/contact", handlers.Repo.Contact)
 
-	mux.Post("/reservation-json", handlers.Repo.AvailabilityJSON)
-
-	mux.Get("/make-reservation", handlers.Repo.MakeReservation)
-	mux.Post("/make-reservation", handlers.Repo.PostMakeReservation)
-	mux.Get("/reservation-summary", handlers.Repo.ReservationSummary)
+	mux.Post("/create-booking", handlers.Repo.PostCreateBooking)
 
 	mux.Get("/user/login", handlers.Repo.Login)
 	mux.Post("/user/login", handlers.Repo.PostLogin)
@@ -46,23 +42,6 @@ func routes(_ *config.AppConfig) http.Handler {
 		mux.Use(Auth)
 		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
 
-		mux.Get("/reservations-calendar", handlers.Repo.AdminReservationsCalendar)
-		mux.Post("/reservations-calendar", handlers.Repo.AdminPostReservationsCalendar)
-
-		mux.Get("/rooms", handlers.Repo.AdminAllRooms)
-		mux.Get("/rooms/{id}", handlers.Repo.AdminSingleRoom)
-		mux.Post("/rooms/{id}", handlers.Repo.PostAdminSingleRoom)
-		mux.Get("/rooms/new-room", handlers.Repo.AdminNewRoom)
-		mux.Post("/rooms/new-room", handlers.Repo.PostAdminNewRoom)
-		mux.Get("/delete-room/{id}", handlers.Repo.AdminDeleteRoom)
-
-		mux.Get("/process-reservation/{src}/{id}/do", handlers.Repo.AdminProcessReservation)
-		mux.Get("/delete-reservation/{src}/{id}/do", handlers.Repo.AdminDeleteReservation)
-
-		mux.Get("/todo-list", handlers.Repo.AdminTodoList)
-		mux.Post("/todo-list", handlers.Repo.PostAdminTodoList)
-		mux.Get("/delete-todo/{id}", handlers.Repo.AdminDeleteTodo)
-
 		// Recent ----------
 		mux.Get("/artists", handlers.Repo.AdminAllArtists)
 		mux.Get("/artists/new-artist", handlers.Repo.AdminNewArtist)
@@ -78,8 +57,6 @@ func routes(_ *config.AppConfig) http.Handler {
 		mux.Post("/booking-options/new-option", handlers.Repo.PostAdminNewOption)
 		mux.Get("/booking-options/{id}", handlers.Repo.AdminSingleOption)
 		mux.Post("/booking-options/{id}", handlers.Repo.PostAdminSingleOption)
-
-		mux.Post("/create-booking", handlers.Repo.PostMakeReservation)
 	})
 
 	return mux

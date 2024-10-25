@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -14,7 +13,6 @@ import (
 	"time"
 
 	"github.com/aidisapp/musiqcity_v2/internal/driver"
-	"github.com/aidisapp/musiqcity_v2/internal/models"
 )
 
 type postData struct {
@@ -70,48 +68,6 @@ func TestHandlers(testPointer *testing.T) {
 			testPointer.Errorf("for %s expected %d but got %d", element.name, element.expectedStatusCode, response.StatusCode)
 		}
 	}
-}
-
-// data for the Reservation handler, /make-reservation route
-var reservationTests = []struct {
-	name               string
-	reservation        models.Reservation
-	expectedStatusCode int
-	expectedLocation   string
-	expectedHTML       string
-}{
-	{
-		name: "reservation-in-session",
-		reservation: models.Reservation{
-			RoomID: 1,
-			Room: models.Room{
-				ID:       1,
-				RoomName: "Generals Suit",
-			},
-		},
-		expectedStatusCode: http.StatusOK,
-		expectedHTML:       `action="/make-reservation"`,
-	},
-	{
-		name:               "reservation-not-in-session",
-		reservation:        models.Reservation{},
-		expectedStatusCode: http.StatusSeeOther,
-		expectedLocation:   "/",
-		expectedHTML:       "",
-	},
-	{
-		name: "non-existent-room",
-		reservation: models.Reservation{
-			RoomID: 100,
-			Room: models.Room{
-				ID:       100,
-				RoomName: "Generals Suit",
-			},
-		},
-		expectedStatusCode: http.StatusSeeOther,
-		expectedLocation:   "/",
-		expectedHTML:       "",
-	},
 }
 
 // postReservationTests is the test data for hte PostReservation handler test
@@ -287,37 +243,6 @@ var testAvailabilityJSONData = []struct {
 	},
 }
 
-// TestAvailabilityJSON tests the AvailabilityJSON handler
-func TestAvailabilityJSON(t *testing.T) {
-	for _, e := range testAvailabilityJSONData {
-		// create request, get the context with session, set header, create recorder
-		var req *http.Request
-		if e.postedData != nil {
-			req, _ = http.NewRequest("POST", "/reservation-json", strings.NewReader(e.postedData.Encode()))
-		} else {
-			req, _ = http.NewRequest("POST", "/reservation-json", nil)
-		}
-		ctx := getContext(req)
-		req = req.WithContext(ctx)
-		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		rr := httptest.NewRecorder()
-
-		// make our handler a http.HandlerFunc and call
-		handler := http.HandlerFunc(Repo.AvailabilityJSON)
-		handler.ServeHTTP(rr, req)
-
-		var j jsonResponse
-		err := json.Unmarshal([]byte(rr.Body.String()), &j)
-		if err != nil {
-			t.Error("failed to parse json!")
-		}
-
-		if j.Ok != e.expectedOK {
-			t.Errorf("%s: expected %v but got %v", e.name, e.expectedOK, j.Ok)
-		}
-	}
-}
-
 // testPostAvailabilityData is data for the PostAvailability handler test, /make-reservation
 var testPostAvailabilityData = []struct {
 	name               string
@@ -371,125 +296,6 @@ var testPostAvailabilityData = []struct {
 			"end":   {"2060-01-02"},
 		},
 		expectedStatusCode: http.StatusSeeOther,
-	},
-}
-
-// TestPostAvailability tests the PostAvailabilityHandler
-func TestPostAvailability(t *testing.T) {
-	for _, e := range testPostAvailabilityData {
-		req, _ := http.NewRequest("POST", "/make-reservation", strings.NewReader(e.postedData.Encode()))
-
-		// get the context with session
-		ctx := getContext(req)
-		req = req.WithContext(ctx)
-
-		// set the request header
-		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		rr := httptest.NewRecorder()
-
-		// make our handler a http.HandlerFunc and call
-		handler := http.HandlerFunc(Repo.PostMakeReservation)
-		handler.ServeHTTP(rr, req)
-
-		if rr.Code != e.expectedStatusCode {
-			t.Errorf("%s gave wrong status code: got %d, wanted %d", e.name, rr.Code, e.expectedStatusCode)
-		}
-	}
-}
-
-// reservationSummaryTests is the data to test ReservationSummary handler
-var reservationSummaryTests = []struct {
-	name               string
-	reservation        models.Reservation
-	url                string
-	expectedStatusCode int
-	expectedLocation   string
-}{
-	{
-		name: "res-in-session",
-		reservation: models.Reservation{
-			RoomID: 1,
-			Room: models.Room{
-				ID:       1,
-				RoomName: "Generals Suit",
-			},
-		},
-		url:                "/reservation-summary",
-		expectedStatusCode: http.StatusOK,
-		expectedLocation:   "",
-	},
-	{
-		name:               "res-not-in-session",
-		reservation:        models.Reservation{},
-		url:                "/reservation-summary",
-		expectedStatusCode: http.StatusSeeOther,
-		expectedLocation:   "/",
-	},
-}
-
-// TestReservationSummary tests the ReservationSummaryHandler
-func TestReservationSummary(t *testing.T) {
-	for _, e := range reservationSummaryTests {
-		req, _ := http.NewRequest("GET", e.url, nil)
-		ctx := getContext(req)
-		req = req.WithContext(ctx)
-
-		rr := httptest.NewRecorder()
-		if e.reservation.RoomID > 0 {
-			session.Put(ctx, "reservation", e.reservation)
-		}
-
-		handler := http.HandlerFunc(Repo.ReservationSummary)
-
-		handler.ServeHTTP(rr, req)
-
-		if rr.Code != e.expectedStatusCode {
-			t.Errorf("%s returned wrong response code: got %d, wanted %d", e.name, rr.Code, e.expectedStatusCode)
-		}
-
-		if e.expectedLocation != "" {
-			actualLoc, _ := rr.Result().Location()
-			if actualLoc.String() != e.expectedLocation {
-				t.Errorf("failed %s: expected location %s, but got location %s", e.name, e.expectedLocation, actualLoc.String())
-			}
-		}
-	}
-}
-
-// chooseRoomTests is the data for ChooseRoom handler tests, /choose-room/{id}
-var chooseRoomTests = []struct {
-	name               string
-	reservation        models.Reservation
-	url                string
-	expectedStatusCode int
-	expectedLocation   string
-}{
-	{
-		name: "reservation-in-session",
-		reservation: models.Reservation{
-			RoomID: 1,
-			Room: models.Room{
-				ID:       1,
-				RoomName: "Generals Suit",
-			},
-		},
-		url:                "/choose-room/1",
-		expectedStatusCode: http.StatusSeeOther,
-		expectedLocation:   "/make-reservation",
-	},
-	{
-		name:               "reservation-not-in-session",
-		reservation:        models.Reservation{},
-		url:                "/choose-room/1",
-		expectedStatusCode: http.StatusSeeOther,
-		expectedLocation:   "/",
-	},
-	{
-		name:               "malformed-url",
-		reservation:        models.Reservation{},
-		url:                "/choose-room/fish",
-		expectedStatusCode: http.StatusSeeOther,
-		expectedLocation:   "/",
 	},
 }
 
@@ -667,133 +473,6 @@ var adminPostReservationCalendarTests = []struct {
 		reservations:         1,
 	},
 }
-
-func TestPostReservationCalendar(t *testing.T) {
-	for _, e := range adminPostReservationCalendarTests {
-		var req *http.Request
-		if e.postedData != nil {
-			req, _ = http.NewRequest("POST", "/admin/reservations-calendar", strings.NewReader(e.postedData.Encode()))
-		} else {
-			req, _ = http.NewRequest("POST", "/admin/reservations-calendar", nil)
-		}
-		ctx := getContext(req)
-		req = req.WithContext(ctx)
-
-		now := time.Now()
-		bm := make(map[string]int)
-		rm := make(map[string]int)
-
-		currentYear, currentMonth, _ := now.Date()
-		currentLocation := now.Location()
-
-		firstOfMonth := time.Date(currentYear, currentMonth, 1, 0, 0, 0, 0, currentLocation)
-		lastOfMonth := firstOfMonth.AddDate(0, 1, -1)
-
-		for d := firstOfMonth; d.After(lastOfMonth) == false; d = d.AddDate(0, 0, 1) {
-			rm[d.Format("2006-01-2")] = 0
-			bm[d.Format("2006-01-2")] = 0
-		}
-
-		if e.blocks > 0 {
-			bm[firstOfMonth.Format("2006-01-2")] = e.blocks
-		}
-
-		if e.reservations > 0 {
-			rm[lastOfMonth.Format("2006-01-2")] = e.reservations
-		}
-
-		session.Put(ctx, "block_map_1", bm)
-		session.Put(ctx, "reservation_map_1", rm)
-
-		// set the header
-		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		rr := httptest.NewRecorder()
-
-		// call the handler
-		handler := http.HandlerFunc(Repo.AdminPostReservationsCalendar)
-		handler.ServeHTTP(rr, req)
-
-		if rr.Code != e.expectedResponseCode {
-			t.Errorf("failed %s: expected code %d, but got %d", e.name, e.expectedResponseCode, rr.Code)
-		}
-
-	}
-}
-
-var adminProcessReservationTests = []struct {
-	name                 string
-	queryParams          string
-	expectedResponseCode int
-	expectedLocation     string
-}{
-	{
-		name:                 "process-reservation",
-		queryParams:          "",
-		expectedResponseCode: http.StatusSeeOther,
-		expectedLocation:     "",
-	},
-	{
-		name:                 "process-reservation-back-to-cal",
-		queryParams:          "?y=2021&m=12",
-		expectedResponseCode: http.StatusSeeOther,
-		expectedLocation:     "",
-	},
-}
-
-func TestAdminProcessReservation(t *testing.T) {
-	for _, e := range adminProcessReservationTests {
-		req, _ := http.NewRequest("GET", fmt.Sprintf("/admin/process-reservation/cal/1/do%s", e.queryParams), nil)
-		ctx := getContext(req)
-		req = req.WithContext(ctx)
-
-		rr := httptest.NewRecorder()
-
-		handler := http.HandlerFunc(Repo.AdminProcessReservation)
-		handler.ServeHTTP(rr, req)
-
-		if rr.Code != http.StatusSeeOther {
-			t.Errorf("failed %s: expected code %d, but got %d", e.name, e.expectedResponseCode, rr.Code)
-		}
-	}
-}
-
-var adminDeleteReservationTests = []struct {
-	name                 string
-	queryParams          string
-	expectedResponseCode int
-	expectedLocation     string
-}{
-	{
-		name:                 "delete-reservation",
-		queryParams:          "",
-		expectedResponseCode: http.StatusSeeOther,
-		expectedLocation:     "",
-	},
-	{
-		name:                 "delete-reservation-back-to-cal",
-		queryParams:          "?y=2021&m=12",
-		expectedResponseCode: http.StatusSeeOther,
-		expectedLocation:     "",
-	},
-}
-
-func TestAdminDeleteReservation(t *testing.T) {
-	for _, e := range adminDeleteReservationTests {
-		req, _ := http.NewRequest("GET", fmt.Sprintf("/admin/delete-reservation/cal/1/do%s", e.queryParams), nil)
-		ctx := getContext(req)
-		req = req.WithContext(ctx)
-
-		rr := httptest.NewRecorder()
-
-		handler := http.HandlerFunc(Repo.AdminDeleteReservation)
-		handler.ServeHTTP(rr, req)
-
-		if rr.Code != http.StatusSeeOther {
-			t.Errorf("failed %s: expected code %d, but got %d", e.name, e.expectedResponseCode, rr.Code)
-		}
-	}
-}
-
 func getContext(request *http.Request) context.Context {
 	ctx, err := session.Load(request.Context(), request.Header.Get("X-Session"))
 	if err != nil {
