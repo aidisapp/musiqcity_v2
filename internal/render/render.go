@@ -74,6 +74,10 @@ func AddDefaultData(templateData *models.TemplateData, r *http.Request) *models.
 		templateData.IsAuthenticated = 1
 	}
 
+	if app.Session.GetInt(r.Context(), "access_level") == 3 {
+		templateData.IsAdmin = 1
+	}
+
 	return templateData
 }
 

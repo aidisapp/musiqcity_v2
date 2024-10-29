@@ -134,15 +134,15 @@
             <div class="mobile-menu fix mb-30 d-xl-none"></div>
             <div class="hr-1 mt-30 mb-30 d-xl-none"></div>
 
-            {{if eq .IsAuthenticated 1}}
+            {{if eq .IsAdmin 1}}
             <div class="offcanvas__btn mb-10">
-              <a class="ms-border-btn" href="/user/account"
-                ><i class="flaticon-user"></i> User Profile</a
+              <a class="ms-border-btn" href="/admin/dashboard"
+                ><i class="flaticon-user"></i> Dashboard</a
               >
             </div>
-
+            {{end}} {{if eq .IsAuthenticated 1}}
             <div class="offcanvas__btn mb-10">
-              <a class="ms-border-btn" href="/"
+              <a class="ms-border-btn" href="/user/list-service"
                 ><i class="fa-solid fa-plus"></i> List Your Service</a
               >
             </div>
@@ -309,25 +309,19 @@
                               <a href="/artists">Artists</a>
                             </li>
 
-                            <li class="has-dropdown">
-                              <a href="javascript:void(0)">Others</a>
-                              <ul class="submenu">
-                                <li><a href="/about">About Us</a></li>
-                                <li>
-                                  <a href="/about">How It Works</a>
-                                </li>
-                                <li>
-                                  <a href="/contact"> Help Center</a>
-                                </li>
-                              </ul>
-                            </li>
-
                             {{if eq .IsAuthenticated 1}}
                             <li class="has-dropdown">
                               <a href="javascript:void(0)">Account</a>
                               <ul class="submenu">
+                                {{if eq .IsAdmin 1}}
                                 <li>
-                                  <a href="/user/account">User Profile</a>
+                                  <a href="/admin/dashboard">Dashboard</a>
+                                </li>
+                                {{end}}
+                                <li>
+                                  <a class="nav-link" href="/user/list-service"
+                                    >List your services</a
+                                  >
                                 </li>
                                 <li>
                                   <a class="nav-link" href="/user/logout"
@@ -347,6 +341,19 @@
                               </ul>
                             </li>
                             {{end}}
+
+                            <li class="has-dropdown">
+                              <a href="javascript:void(0)">Others</a>
+                              <ul class="submenu">
+                                <li><a href="/about">About Us</a></li>
+                                <li>
+                                  <a href="/about">How It Works</a>
+                                </li>
+                                <li>
+                                  <a href="/contact"> Help Center</a>
+                                </li>
+                              </ul>
+                            </li>                            
                           </ul>
                         </nav>
                         <!-- for wp -->

@@ -11,27 +11,28 @@ import (
 )
 
 // Authenticate authenticates a user
-func (repo *postgresDBRepo) Authenticate(email, testPassword string) (int, string, error) {
+func (repo *postgresDBRepo) Authenticate(email, testPassword string) (int, string, int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	var id int
 	var hashedPassword string
+	var access_level int
 
-	row := repo.DB.QueryRowContext(ctx, "SELECT id, password FROM users WHERE email = $1", email)
-	err := row.Scan(&id, &hashedPassword)
+	row := repo.DB.QueryRowContext(ctx, "SELECT id, password, access_level FROM users WHERE email = $1", email)
+	err := row.Scan(&id, &hashedPassword, &access_level)
 	if err != nil {
-		return id, "", err
+		return id, "", 0, err
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(testPassword))
 	if err == bcrypt.ErrMismatchedHashAndPassword {
-		return 0, "", errors.New("incorrect password")
+		return 0, "", 0, errors.New("incorrect password")
 	} else if err != nil {
-		return 0, "", err
+		return 0, "", 0, err
 	}
 
-	return id, hashedPassword, nil
+	return id, hashedPassword, access_level, nil
 }
 
 // Check if a user exists in the database via email
